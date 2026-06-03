@@ -267,51 +267,76 @@
     }
 
     /* ================================================================
-       TABLE OF CONTENTS
+       SIDEBAR TOC — auto show/hide with scroll-spy
        ================================================================ */
-    .toc {
-      margin-top: 64px;
-      padding: 28px 32px;
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      background: var(--bg-secondary);
+    .sidebar-toc {
+      position: fixed;
+      top: 50%;
+      left: max(16px, calc((100vw - 1080px) / 2 - 200px));
+      transform: translateY(-50%);
+      width: 180px;
+      z-index: 500;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease, transform 0.4s ease;
     }
 
-    .toc-title {
-      font-size: 0.72rem;
+    .sidebar-toc.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .sidebar-toc .toc-title {
+      font-size: 0.65rem;
       font-weight: 600;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--text-muted);
-      margin-bottom: 16px;
+      margin-bottom: 14px;
+      padding-left: 14px;
     }
 
-    .toc-list {
+    .sidebar-toc .toc-list {
       list-style: none;
-      display: flex; flex-direction: column; gap: 8px;
+      display: flex; flex-direction: column; gap: 2px;
+      position: relative;
     }
 
-    .toc-list a {
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-      text-decoration: none;
-      display: flex; align-items: center; gap: 10px;
-      transition: color 0.2s;
-    }
-
-    .toc-list a::before {
+    /* The left accent bar track */
+    .sidebar-toc .toc-list::before {
       content: '';
-      width: 4px; height: 4px;
-      border-radius: 50%;
-      background: var(--text-muted);
-      flex-shrink: 0;
-      transition: background 0.2s;
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: var(--border);
+      border-radius: 2px;
     }
 
-    .toc-list a:hover { color: var(--accent-light); }
-    .toc-list a:hover::before { background: var(--accent); }
+    .sidebar-toc .toc-list a {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 6px 14px;
+      display: block;
+      position: relative;
+      transition: color 0.25s;
+      border-left: 2px solid transparent;
+      margin-left: -1px;
+    }
 
-    .toc-list .indent { padding-left: 20px; }
+    .sidebar-toc .toc-list a:hover {
+      color: var(--text-secondary);
+    }
+
+    .sidebar-toc .toc-list a.active {
+      color: var(--accent-light);
+      border-left-color: var(--accent);
+    }
+
+    /* Hide on narrow screens where sidebar would overlap content */
+    @media (max-width: 1380px) {
+      .sidebar-toc { display: none; }
+    }
 
     /* ================================================================
        ARTICLE SECTIONS
@@ -754,25 +779,25 @@
 </div>
 
 <!-- ================================================================
+     SIDEBAR TOC — appears on scroll, auto-highlights current section
+     ================================================================ -->
+<aside class="sidebar-toc" id="sidebarToc">
+  <div class="toc-title">On this page</div>
+  <ul class="toc-list">
+    <li><a href="#introduction" data-section="introduction">Introduction</a></li>
+    <li><a href="#capabilities" data-section="capabilities">Capabilities</a></li>
+    <li><a href="#approach" data-section="approach">Our Approach</a></li>
+    <li><a href="#benchmarks" data-section="benchmarks">Benchmarks</a></li>
+    <li><a href="#limitations" data-section="limitations">Limitations</a></li>
+    <li><a href="#authors" data-section="authors">Authors</a></li>
+    <li><a href="#citation" data-section="citation">Citation</a></li>
+  </ul>
+</aside>
+
+<!-- ================================================================
      MAIN CONTENT — TML-style single column
      ================================================================ -->
 <main class="content">
-
-  <!-- ── Table of Contents ── -->
-  <div class="toc reveal">
-    <div class="toc-title">Contents</div>
-    <ul class="toc-list">
-      <li><a href="#introduction">Introduction</a></li>
-      <li><a href="#capabilities">Capabilities</a></li>
-      <li><a href="#approach">Our approach</a></li>
-      <!-- <li class="indent"><a href="#architecture">Architecture</a></li> -->
-      <!-- <li class="indent"><a href="#training">Training</a></li> -->
-      <li><a href="#benchmarks">Benchmarks</a></li>
-      <li><a href="#limitations">Limitations and future work</a></li>
-      <li><a href="#authors">Authors</a></li>
-      <li><a href="#citation">Citation</a></li>
-    </ul>
-  </div>
 
   <!-- ================================================================
        INTRODUCTION
@@ -1037,7 +1062,7 @@
      SCRIPTS
      ================================================================ -->
 <script>
-  /* Scroll reveal */
+  /* ── Scroll reveal ── */
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) {
@@ -1049,7 +1074,7 @@
 
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-  /* Video hover auto-play */
+  /* ── Video hover auto-play ── */
   document.querySelectorAll('.capability-card').forEach(card => {
     const video = card.querySelector('video');
     if (!video) return;
@@ -1057,7 +1082,7 @@
     card.addEventListener('mouseleave', () => { video.pause(); video.currentTime = 0; });
   });
 
-  /* Copy BibTeX */
+  /* ── Copy BibTeX ── */
   function copyBibtex() {
     const code = document.querySelector('.bibtex-block code').textContent;
     navigator.clipboard.writeText(code).then(() => {
@@ -1066,6 +1091,61 @@
       setTimeout(() => btn.textContent = 'Copy', 2000);
     });
   }
+
+  /* ── Sidebar TOC: auto show/hide + scroll-spy ── */
+  (() => {
+    const sidebar = document.getElementById('sidebarToc');
+    const tocLinks = sidebar.querySelectorAll('.toc-list a');
+    const sections = Array.from(tocLinks).map(a => {
+      return document.getElementById(a.dataset.section);
+    }).filter(Boolean);
+
+    // Determine content zone: show TOC only when scrolled into article sections
+    const contentStart = sections[0];
+    const footer = document.querySelector('footer');
+
+    function updateToc() {
+      const scrollY = window.scrollY + window.innerHeight * 0.35;
+
+      // Show/hide sidebar based on scroll position
+      const startY = contentStart ? contentStart.offsetTop - 100 : 0;
+      const endY = footer ? footer.offsetTop : document.body.scrollHeight;
+
+      if (window.scrollY >= startY && window.scrollY < endY) {
+        sidebar.classList.add('visible');
+      } else {
+        sidebar.classList.remove('visible');
+      }
+
+      // Scroll-spy: find current section
+      let currentId = '';
+      for (let i = sections.length - 1; i >= 0; i--) {
+        if (sections[i].offsetTop <= scrollY) {
+          currentId = sections[i].id;
+          break;
+        }
+      }
+
+      tocLinks.forEach(link => {
+        link.classList.toggle('active', link.dataset.section === currentId);
+      });
+    }
+
+    // Throttle scroll handler
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          updateToc();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+
+    // Initial run
+    updateToc();
+  })();
 </script>
 
 </body>
