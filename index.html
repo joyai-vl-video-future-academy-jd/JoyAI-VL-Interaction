@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JoyAI-VL-Interaction</title>
+  <meta name="description" content="JoyAI-VL-Interaction: [Your Subtitle Here]" />
+  <meta name="keywords" content="JoyAI, video understanding, video-language, interaction, multimodal, Joy Future Academy, JD" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="JoyAI-VL-Interaction" />
+  <meta property="og:description" content="[Your one-line description]" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://joyai-vl-video-future-academy-jd.github.io/JoyAI-VL-Interaction/" />
+  <!-- <meta property="og:image" content="./assets/images/og-thumb.jpg" /> -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ================================================================
+       COLOR TOKENS — Echo-LongVideo-Page 配色
+       ================================================================ */
+    :root {
+      --bg-primary:    #09090f;
+      --bg-secondary:  #0f0f18;
+      --bg-card:       #131320;
+      --bg-card-hover: #1a1a2e;
+      --bg-code:       #0d0d17;
+
+      --text-primary:  #e8e8f0;
+      --text-secondary:#9090a8;
+      --text-muted:    #606078;
+
+      --accent:        #5b7cfa;
+      --accent-light:  #7d9bff;
+      --accent-dim:    rgba(91, 124, 250, 0.12);
+      --accent-glow:   rgba(91, 124, 250, 0.08);
+      --accent-2:      #a78bfa;
+      --accent-2-dim:  rgba(167, 139, 250, 0.12);
+      --green:         #34d399;
+      --green-dim:     rgba(52, 211, 153, 0.12);
+
+      --border:        rgba(255, 255, 255, 0.06);
+      --border-hover:  rgba(91, 124, 250, 0.25);
+
+      --radius:        12px;
+      --radius-lg:     20px;
+
+      --font-body:     'DM Sans', system-ui, sans-serif;
+      --font-display:  'Instrument Serif', Georgia, serif;
+      --font-mono:     'JetBrains Mono', monospace;
+    }
+
+    /* ================================================================
+       RESET & BASE
+       ================================================================ */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.8;
+      overflow-x: hidden;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Grain overlay */
+    body::after {
+      content: '';
+      position: fixed; inset: 0; z-index: 9999;
+      pointer-events: none; opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: #a0b8ff; }
+
+    ::selection { background: rgba(91, 124, 250, 0.3); }
+
+    /* ================================================================
+       NAVIGATION
+       ================================================================ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      background: rgba(9, 9, 15, 0.8);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 32px;
+      height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .nav-brand {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      color: var(--text-primary);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-brand span { color: var(--accent); }
+
+    .nav-links {
+      display: flex; gap: 24px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-weight: 400;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--text-primary); }
+
+    /* ================================================================
+       HERO
+       ================================================================ */
+    .hero {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 140px 32px 40px;
+    }
+
+    .hero-meta {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+    }
+
+    .hero-meta .team-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 14px;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+      background: var(--accent-dim);
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--accent-light);
+    }
+
+    .hero-meta .date { color: var(--text-muted); }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.6rem, 5.5vw, 4rem);
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      max-width: 800px;
+      animation: fadeUp 0.7s ease both;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      margin-top: 24px;
+      font-size: 1.15rem;
+      color: var(--text-secondary);
+      max-width: 680px;
+      line-height: 1.8;
+      animation: fadeUp 0.7s ease 0.1s both;
+    }
+
+    .hero-buttons {
+      margin-top: 36px;
+      display: flex; gap: 12px; flex-wrap: wrap;
+      animation: fadeUp 0.7s ease 0.2s both;
+    }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 11px 24px;
+      border-radius: 100px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      font-family: var(--font-body);
+      cursor: pointer;
+      transition: all 0.25s;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+    }
+    .btn-primary:hover {
+      background: var(--accent-light);
+      color: #fff;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px rgba(91, 124, 250, 0.25);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover {
+      border-color: var(--border-hover);
+      background: rgba(255,255,255,0.02);
+    }
+
+    /* ================================================================
+       HERO IMAGE
+       ================================================================ */
+    .hero-cover {
+      max-width: 1080px;
+      margin: 48px auto 0;
+      padding: 0 32px;
+      animation: fadeUp 0.7s ease 0.3s both;
+    }
+
+    .hero-cover .cover-placeholder {
+      width: 100%;
+      aspect-ratio: 21 / 9;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      background: linear-gradient(135deg, #0f0f20 0%, #151530 40%, #0f1a3a 100%);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-cover .cover-placeholder::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 30% 50%, var(--accent-glow) 0%, transparent 60%);
+    }
+
+    .hero-cover img {
+      width: 100%;
+      border-radius: var(--radius-lg);
+      display: block;
+    }
+
+    /* ================================================================
+       CONTENT LAYOUT — TML-style centered column
+       ================================================================ */
+    .content {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    /* ================================================================
+       TABLE OF CONTENTS
+       ================================================================ */
+    .toc {
+      margin-top: 64px;
+      padding: 28px 32px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--bg-secondary);
+    }
+
+    .toc-title {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .toc-list {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+
+    .toc-list a {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      display: flex; align-items: center; gap: 10px;
+      transition: color 0.2s;
+    }
+
+    .toc-list a::before {
+      content: '';
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--text-muted);
+      flex-shrink: 0;
+      transition: background 0.2s;
+    }
+
+    .toc-list a:hover { color: var(--accent-light); }
+    .toc-list a:hover::before { background: var(--accent); }
+
+    .toc-list .indent { padding-left: 20px; }
+
+    /* ================================================================
+       ARTICLE SECTIONS
+       ================================================================ */
+    .section {
+      margin-top: 72px;
+    }
+
+    .section h2 {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-top: 40px;
+      margin-bottom: 16px;
+      color: var(--text-primary);
+    }
+
+    .section p {
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+      font-size: 1rem;
+      line-height: 1.85;
+    }
+
+    .section p strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    /* Placeholder block for empty content */
+    .placeholder {
+      padding: 32px;
+      border-radius: var(--radius);
+      border: 1px dashed rgba(255, 255, 255, 0.08);
+      background: var(--bg-secondary);
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      text-align: center;
+      line-height: 1.7;
+    }
+
+    .placeholder .icon {
+      font-size: 1.5rem;
+      margin-bottom: 8px;
+      opacity: 0.5;
+    }
+
+    /* ================================================================
+       CAPABILITY CARDS — TML-style demo grid
+       ================================================================ */
+    .capability-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 24px 0;
+    }
+
+    .capability-card {
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      overflow: hidden;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .capability-card:hover {
+      border-color: var(--border-hover);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+
+    .capability-card.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .capability-card .video-slot {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: linear-gradient(135deg, #101020, #0f1a30);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      position: relative;
+    }
+
+    .capability-card .video-slot video {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+
+    .capability-card .video-slot .play-icon {
+      position: absolute;
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: rgba(91, 124, 250, 0.2);
+      border: 1px solid rgba(91, 124, 250, 0.3);
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .capability-card .video-slot .play-icon::after {
+      content: '';
+      width: 0; height: 0;
+      border-style: solid;
+      border-width: 8px 0 8px 14px;
+      border-color: transparent transparent transparent rgba(255,255,255,0.7);
+      margin-left: 3px;
+    }
+
+    .capability-card .cap-body {
+      padding: 20px;
+    }
+
+    .capability-card .cap-body h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text-primary);
+    }
+
+    .capability-card .cap-body p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    /* ================================================================
+       ARCHITECTURE DIAGRAM PLACEHOLDER
+       ================================================================ */
+    .diagram-slot {
+      width: 100%;
+      margin: 28px 0;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--bg-secondary);
+      overflow: hidden;
+    }
+
+    .diagram-slot img {
+      width: 100%;
+      display: block;
+    }
+
+    .diagram-slot .empty {
+      padding: 60px 32px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .diagram-caption {
+      margin-top: 10px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      font-style: italic;
+      text-align: center;
+    }
+
+    /* ================================================================
+       BENCHMARK TABLE
+       ================================================================ */
+    .table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      margin: 24px 0;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+
+    .table-wrapper table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      white-space: nowrap;
+    }
+
+    .table-wrapper thead {
+      background: var(--bg-secondary);
+    }
+
+    .table-wrapper th {
+      padding: 14px 18px;
+      font-weight: 600;
+      text-align: left;
+      color: var(--text-primary);
+      border-bottom: 1px solid var(--border);
+      font-size: 0.8rem;
+    }
+
+    .table-wrapper td {
+      padding: 12px 18px;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .table-wrapper tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .table-wrapper tbody tr:hover {
+      background: rgba(255, 255, 255, 0.015);
+    }
+
+    .table-wrapper .best {
+      color: var(--accent-light);
+      font-weight: 600;
+    }
+
+    /* ================================================================
+       HIGHLIGHT STATS ROW
+       ================================================================ */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin: 32px 0;
+    }
+
+    .stat-item {
+      padding: 24px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      text-align: center;
+    }
+
+    .stat-item .stat-value {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-style: italic;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .stat-item .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* ================================================================
+       AUTHORS
+       ================================================================ */
+    .authors-block {
+      margin: 28px 0;
+      padding: 28px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--bg-secondary);
+      text-align: center;
+    }
+
+    .authors-block .author-list {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 2;
+    }
+
+    .authors-block .author-list .lead {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .authors-block .affiliations {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+    }
+
+    /* ================================================================
+       BIBTEX
+       ================================================================ */
+    .bibtex-block {
+      position: relative;
+      margin: 20px 0;
+    }
+
+    .bibtex-block pre {
+      padding: 24px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--bg-code);
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      overflow-x: auto;
+      line-height: 1.7;
+    }
+
+    .bibtex-block .copy-btn {
+      position: absolute;
+      top: 12px; right: 12px;
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      font-family: var(--font-body);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .bibtex-block .copy-btn:hover {
+      border-color: var(--border-hover);
+      color: var(--text-primary);
+    }
+
+    /* ================================================================
+       FOOTNOTES
+       ================================================================ */
+    .footnote-ref {
+      font-size: 0.7em;
+      vertical-align: super;
+      color: var(--accent);
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    /* ================================================================
+       FOOTER
+       ================================================================ */
+    footer {
+      max-width: 760px;
+      margin: 80px auto 0;
+      padding: 32px 32px 48px;
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    footer a { color: var(--text-secondary); }
+    footer a:hover { color: var(--accent-light); }
+
+    /* ================================================================
+       ANIMATIONS
+       ================================================================ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0; transform: translateY(24px);
+      transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .reveal.visible {
+      opacity: 1; transform: translateY(0);
+    }
+
+    /* ================================================================
+       RESPONSIVE
+       ================================================================ */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hero { padding: 110px 20px 32px; }
+      .hero-cover { padding: 0 20px; }
+      .content { padding: 0 20px; }
+      .capability-grid { grid-template-columns: 1fr; }
+      .stats-row { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 12px; text-align: center; padding: 32px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ================================================================
+     NAVIGATION
+     ================================================================ -->
+<nav>
+  <div class="nav-inner">
+    <a href="https://joyai-vl-video-future-academy-jd.github.io/" class="nav-brand">
+      JoyAI-<span>VL</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#capabilities">Capabilities</a></li>
+      <li><a href="#approach">Approach</a></li>
+      <li><a href="#benchmarks">Benchmarks</a></li>
+      <li><a href="#authors">Authors</a></li>
+      <li><a href="#citation">BibTeX</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ================================================================
+     HERO
+     ================================================================ -->
+<header class="hero">
+  <div class="hero-meta">
+    <span class="team-tag">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+      Video Understanding Team @ Joy Future Academy, JD
+    </span>
+    <span class="date">· June 2026</span>
+  </div>
+
+  <h1>JoyAI-VL-<em>Interaction</em></h1>
+
+  <!-- ✏️ 替换为你的一句话副标题 -->
+  <p class="hero-subtitle">
+    [Your subtitle: e.g. A real-time video-language interaction model that perceives,
+    reasons, and responds in continuous multimodal streams.]
+  </p>
+
+  <div class="hero-buttons">
+    <!-- ✏️ 替换为实际链接 -->
+    <a href="#" class="btn btn-primary">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      Paper
+    </a>
+    <a href="https://github.com/joyai-vl-video-future-academy-jd/JoyAI-VL-Interaction" class="btn btn-outline">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+      Code
+    </a>
+    <a href="#capabilities" class="btn btn-outline">Demo ↓</a>
+  </div>
+</header>
+
+<!-- ================================================================
+     HERO COVER IMAGE
+     ================================================================ -->
+<div class="hero-cover">
+  <!-- ✏️ 替换为你的 cover 图片: <img src="./assets/images/cover.jpg" alt="JoyAI-VL-Interaction" /> -->
+  <div class="cover-placeholder">
+    <span>✏️ 在此放置 Hero 封面图 (建议 21:9 比例)</span>
+  </div>
+</div>
+
+<!-- ================================================================
+     MAIN CONTENT — TML-style single column
+     ================================================================ -->
+<main class="content">
+
+  <!-- ── Table of Contents ── -->
+  <div class="toc reveal">
+    <div class="toc-title">Contents</div>
+    <ul class="toc-list">
+      <li><a href="#introduction">Introduction</a></li>
+      <li><a href="#capabilities">Capabilities</a></li>
+      <li><a href="#approach">Our approach</a></li>
+      <!-- <li class="indent"><a href="#architecture">Architecture</a></li> -->
+      <!-- <li class="indent"><a href="#training">Training</a></li> -->
+      <li><a href="#benchmarks">Benchmarks</a></li>
+      <li><a href="#limitations">Limitations and future work</a></li>
+      <li><a href="#authors">Authors</a></li>
+      <li><a href="#citation">Citation</a></li>
+    </ul>
+  </div>
+
+  <!-- ================================================================
+       INTRODUCTION
+       ================================================================ -->
+  <section class="section reveal" id="introduction">
+    <h2>Introduction</h2>
+
+    <!-- ✏️ 替换为你的正式 introduction -->
+    <div class="placeholder">
+      <div class="icon">📝</div>
+      在此填写项目简介 / Abstract。<br/>
+      建议包含：问题背景、你们的方法概述、核心贡献。
+    </div>
+
+    <!-- 高亮数据行，展示关键指标 -->
+    <div class="stats-row">
+      <div class="stat-item">
+        <div class="stat-value">--</div>
+        <div class="stat-label">Metric A</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">--</div>
+        <div class="stat-label">Metric B</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">--</div>
+        <div class="stat-label">Metric C</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       CAPABILITIES (demo videos)
+       ================================================================ -->
+  <section class="section reveal" id="capabilities">
+    <h2>Capabilities</h2>
+
+    <p>
+      <!-- ✏️ 一段总体描述 -->
+      [概述你们的模型有哪些关键能力，每个 demo 对应一项。]
+    </p>
+
+    <div class="capability-grid">
+
+      <!-- Demo 1 -->
+      <div class="capability-card">
+        <div class="video-slot">
+          <!-- ✏️ 替换为: <video src="./assets/videos/demo1.mp4" muted loop playsinline></video> -->
+          <div class="play-icon"></div>
+        </div>
+        <div class="cap-body">
+          <h4>[Capability 1 Title]</h4>
+          <p>[简述此项能力，例如：实时视频问答、多轮对话……]</p>
+        </div>
+      </div>
+
+      <!-- Demo 2 -->
+      <div class="capability-card">
+        <div class="video-slot">
+          <div class="play-icon"></div>
+        </div>
+        <div class="cap-body">
+          <h4>[Capability 2 Title]</h4>
+          <p>[简述此项能力]</p>
+        </div>
+      </div>
+
+      <!-- Demo 3 — full width -->
+      <div class="capability-card full-width">
+        <div class="video-slot">
+          <div class="play-icon"></div>
+        </div>
+        <div class="cap-body">
+          <h4>[Capability 3 Title — Highlight Demo]</h4>
+          <p>[这里放一个最重要的、完整的 demo 展示，可以跨两列全宽。]</p>
+        </div>
+      </div>
+
+      <!-- Demo 4 -->
+      <div class="capability-card">
+        <div class="video-slot">
+          <div class="play-icon"></div>
+        </div>
+        <div class="cap-body">
+          <h4>[Capability 4 Title]</h4>
+          <p>[简述此项能力]</p>
+        </div>
+      </div>
+
+      <!-- Demo 5 -->
+      <div class="capability-card">
+        <div class="video-slot">
+          <div class="play-icon"></div>
+        </div>
+        <div class="cap-body">
+          <h4>[Capability 5 Title]</h4>
+          <p>[简述此项能力]</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================================================================
+       APPROACH
+       ================================================================ -->
+  <section class="section reveal" id="approach">
+    <h2>Our Approach</h2>
+
+    <!-- ✏️ 替换为你的方法描述 -->
+    <div class="placeholder">
+      <div class="icon">🏗️</div>
+      在此填写方法概述，如：整体系统架构、模型设计思路、关键创新点。
+    </div>
+
+    <!-- Architecture Diagram -->
+    <h3>System Overview</h3>
+    <div class="diagram-slot">
+      <!-- ✏️ 替换为: <img src="./assets/images/architecture.png" alt="System architecture" /> -->
+      <div class="empty">✏️ 在此放置系统架构图</div>
+    </div>
+    <p class="diagram-caption">
+      [图注：系统整体架构图说明。]
+    </p>
+
+    <div class="placeholder" style="margin-top: 28px;">
+      <div class="icon">⚙️</div>
+      更多技术细节（模型结构、训练策略、推理优化等）在此补充。<br/>
+      可以按 TML 的风格分多个 h3 小节来写。
+    </div>
+  </section>
+
+  <!-- ================================================================
+       BENCHMARKS
+       ================================================================ -->
+  <section class="section reveal" id="benchmarks">
+    <h2>Benchmarks</h2>
+
+    <p>
+      <!-- ✏️ 一段总体说明 -->
+      [概述你们在哪些 benchmark 上进行了评估。]
+    </p>
+
+    <!-- Chart placeholder -->
+    <div class="diagram-slot">
+      <!-- ✏️ 替换为对比图: <img src="./assets/images/benchmark-chart.png" alt="Benchmark comparison" /> -->
+      <div class="empty">✏️ 在此放置 Benchmark 对比图（散点图 / 雷达图等）</div>
+    </div>
+
+    <!-- Benchmark table -->
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Benchmark</th>
+            <th>JoyAI-VL-Interaction</th>
+            <th>Baseline A</th>
+            <th>Baseline B</th>
+            <th>Baseline C</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>[Benchmark 1]</td>
+            <td class="best">--</td>
+            <td>--</td>
+            <td>--</td>
+            <td>--</td>
+          </tr>
+          <tr>
+            <td>[Benchmark 2]</td>
+            <td class="best">--</td>
+            <td>--</td>
+            <td>--</td>
+            <td>--</td>
+          </tr>
+          <tr>
+            <td>[Benchmark 3]</td>
+            <td>--</td>
+            <td>--</td>
+            <td class="best">--</td>
+            <td>--</td>
+          </tr>
+          <tr>
+            <td>[Benchmark 4]</td>
+            <td class="best">--</td>
+            <td>--</td>
+            <td>--</td>
+            <td>--</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </section>
+
+  <!-- ================================================================
+       LIMITATIONS
+       ================================================================ -->
+  <section class="section reveal" id="limitations">
+    <h2>Limitations and Future Work</h2>
+    <div class="placeholder">
+      <div class="icon">🔮</div>
+      在此填写当前方法的局限性和未来方向。
+    </div>
+  </section>
+
+  <!-- ================================================================
+       AUTHORS
+       ================================================================ -->
+  <section class="section reveal" id="authors">
+    <h2>Authors</h2>
+    <div class="authors-block">
+      <div class="author-list">
+        <!-- ✏️ 替换为实际作者列表 -->
+        <span class="lead">Author A</span><sup>1,*</sup> &nbsp;
+        <span class="lead">Author B</span><sup>1,*</sup> &nbsp;
+        Author C<sup>2</sup> &nbsp;
+        Author D<sup>1</sup> &nbsp;
+        Author E<sup>3</sup> &nbsp;
+        Author F<sup>1</sup> &nbsp;
+        Author G<sup>2</sup> &nbsp;
+        Author H<sup>1,+</sup>
+      </div>
+      <div class="affiliations">
+        <sup>1</sup>Joy Future Academy, JD &nbsp;&nbsp;
+        <sup>2</sup>University A &nbsp;&nbsp;
+        <sup>3</sup>University B<br/>
+        <span style="margin-top:4px; display:inline-block;">* Equal contribution &nbsp; + Project lead</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       CITATION
+       ================================================================ -->
+  <section class="section reveal" id="citation">
+    <h2>Citation</h2>
+    <div class="bibtex-block">
+      <button class="copy-btn" onclick="copyBibtex()">Copy</button>
+      <pre><code>@techreport{joyai2026vlinteraction,
+  title        = {JoyAI-VL-Interaction: [Full Title]},
+  author       = {{Video Understanding Team @ Joy Future Academy, JD}},
+  institution  = {Joy Future Academy, JD},
+  year         = {2026},
+  month        = {June}
+}</code></pre>
+    </div>
+  </section>
+
+</main>
+
+<!-- ================================================================
+     FOOTER
+     ================================================================ -->
+<footer>
+  <span>© 2026 Video Understanding Team, Joy Future Academy, JD</span>
+  <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'}); return false;">Back to top ↑</a>
+</footer>
+
+<!-- ================================================================
+     SCRIPTS
+     ================================================================ -->
+<script>
+  /* Scroll reveal */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  /* Video hover auto-play */
+  document.querySelectorAll('.capability-card').forEach(card => {
+    const video = card.querySelector('video');
+    if (!video) return;
+    card.addEventListener('mouseenter', () => video.play());
+    card.addEventListener('mouseleave', () => { video.pause(); video.currentTime = 0; });
+  });
+
+  /* Copy BibTeX */
+  function copyBibtex() {
+    const code = document.querySelector('.bibtex-block code').textContent;
+    navigator.clipboard.writeText(code).then(() => {
+      const btn = document.querySelector('.copy-btn');
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy', 2000);
+    });
+  }
+</script>
+
+</body>
+</html>
