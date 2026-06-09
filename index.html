@@ -1053,6 +1053,23 @@
       justify-content: center;
     }
 
+    .capability-grid.memory-compare {
+      grid-template-columns: minmax(0, 1.16fr) minmax(300px, 0.84fr);
+      grid-template-rows: auto minmax(132px, auto);
+    }
+
+    .capability-grid.memory-compare > .capability-card:not(.featured):not(.no-video) {
+      grid-template-columns: minmax(180px, 46%) minmax(0, 1fr);
+    }
+
+    .capability-grid.memory-compare > .capability-card.no-video {
+      min-height: 132px;
+    }
+
+    .capability-grid.memory-compare > .capability-card.no-video .cap-body {
+      padding: 20px 22px;
+    }
+
     .model-label {
       display: inline-flex;
       align-items: center;
@@ -2618,7 +2635,7 @@
                     </div>
                     <span class="case-tag">Time awareness</span>
                   </div>
-                  <div class="capability-grid">
+                  <div class="capability-grid baseline-inline">
                     <div class="capability-card featured">
                       <div class="video-slot">
                         <video src="./assets/videos/cases/time-cooking-joy_2k.mp4" controls preload="metadata" playsinline></video>
@@ -2719,7 +2736,7 @@
                     </div>
                     <span class="case-tag">Long visual memory (5+ min)</span>
                   </div>
-                  <div class="capability-grid">
+                  <div class="capability-grid memory-compare">
                     <div class="capability-card featured">
                       <div class="video-slot">
                         <video src="./assets/videos/cases/memory-meatball-joy_2k.mp4" controls preload="metadata" playsinline></video>
