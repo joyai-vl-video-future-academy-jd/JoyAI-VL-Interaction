@@ -667,7 +667,7 @@
     .sample-demo-header h4 {
       margin: 0;
       color: var(--text-primary);
-      font-size: 1.02rem;
+      font-size: 1.08rem;
       line-height: 1.35;
       letter-spacing: -0.01em;
     }
@@ -828,29 +828,38 @@
 
     .capability-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: minmax(0, 1.06fr) minmax(300px, 0.94fr);
+      grid-template-rows: repeat(2, minmax(0, auto));
       gap: 16px;
       margin: 24px 0;
+      align-items: stretch;
     }
 
     .capability-grid.single-model {
-      grid-template-columns: repeat(auto-fit, minmax(320px, 560px));
-      justify-content: center;
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: auto;
+      justify-items: center;
     }
 
     .capability-grid.single-model .capability-card .video-slot {
       aspect-ratio: 16 / 9;
+      border-right: 1px solid var(--border);
     }
 
     .capability-grid.single-model .capability-card {
-      width: 100%;
-      max-width: 560px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(260px, 0.55fr);
+      width: min(100%, 940px);
+      max-width: none;
       justify-self: center;
     }
 
     .capability-card.single-demo .cap-body {
       display: grid;
-      gap: 8px;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      align-content: center;
+      padding: 22px 24px;
     }
 
     .capability-card.single-demo .demo-kicker {
@@ -863,8 +872,15 @@
     }
 
     .capability-card.single-demo .model-label {
-      color: var(--text-secondary);
-      font-size: 0.82rem;
+      color: var(--text-primary);
+      font-size: 0.94rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .capability-card.single-demo .cap-body p {
+      margin: 0;
+      font-size: 0.92rem;
     }
 
     .capability-card {
@@ -873,6 +889,85 @@
       background: var(--bg-card);
       overflow: hidden;
       transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .capability-grid:not(.single-model) > .capability-card.featured {
+      grid-row: 1 / span 2;
+      border-color: rgba(190, 22, 16, 0.58);
+      border-width: 1.5px;
+      box-shadow:
+        0 18px 50px rgba(190, 22, 16, 0.12),
+        inset 0 0 0 1px rgba(226, 35, 26, 0.08);
+    }
+
+    .capability-grid:not(.single-model) > .capability-card.featured .video-slot {
+      aspect-ratio: 16 / 10;
+    }
+
+    .capability-grid:not(.single-model) > .capability-card:not(.featured) {
+      display: grid;
+      grid-template-columns: minmax(180px, 46%) minmax(0, 1fr);
+    }
+
+    .capability-grid:not(.single-model) > .capability-card:not(.featured) .video-slot {
+      height: 100%;
+      min-height: 190px;
+      aspect-ratio: auto;
+      border-right: 1px solid var(--border);
+    }
+
+    .capability-grid:not(.single-model) > .capability-card:not(.featured) .cap-body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .capability-grid.baseline-inline {
+      grid-template-columns: minmax(0, 1.08fr) repeat(2, minmax(0, 0.46fr));
+      grid-template-rows: auto;
+      align-items: stretch;
+    }
+
+    .capability-grid.baseline-inline > .capability-card.featured {
+      grid-row: auto;
+    }
+
+    .capability-grid.baseline-inline > .capability-card.featured .video-slot {
+      aspect-ratio: 16 / 10;
+    }
+
+    .capability-grid.baseline-inline > .capability-card .cap-body {
+      padding: 18px 20px 20px;
+    }
+
+    .capability-grid.baseline-inline > .capability-card:not(.featured) {
+      grid-template-columns: 1fr;
+    }
+
+    .capability-grid.baseline-inline > .capability-card:not(.featured) .video-slot {
+      min-height: 0;
+      height: auto;
+      aspect-ratio: 4 / 5;
+      border-right: 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .capability-grid.baseline-inline > .capability-card:not(.featured) .video-slot video {
+      object-fit: contain;
+      object-position: center center;
+    }
+
+    .capability-grid.baseline-inline > .capability-card:not(.featured) .cap-body {
+      justify-content: flex-start;
+    }
+
+    .capability-grid.baseline-inline > .capability-card .cap-body h4 {
+      margin-bottom: 6px;
+    }
+
+    .capability-grid.baseline-inline > .capability-card .cap-body p {
+      font-size: 0.88rem;
+      line-height: 1.6;
     }
 
     .capability-card:hover {
@@ -922,14 +1017,14 @@
     }
 
     .capability-card .cap-body h4 {
-      font-size: 0.95rem;
+      font-size: 1rem;
       font-weight: 600;
       margin-bottom: 8px;
       color: var(--text-primary);
     }
 
     .capability-card .cap-body p {
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       color: var(--text-secondary);
       line-height: 1.7;
       margin: 0;
@@ -938,6 +1033,24 @@
     .capability-card.featured {
       border-color: rgba(226, 35, 26, 0.38);
       background: linear-gradient(180deg, var(--accent-dim), var(--bg-card) 42%);
+    }
+
+    .capability-card.no-video {
+      border-style: dashed;
+      background:
+        linear-gradient(135deg, rgba(226, 35, 26, 0.035), transparent 55%),
+        var(--bg-card);
+    }
+
+    .capability-grid:not(.single-model) > .capability-card.no-video {
+      display: flex;
+      min-height: 190px;
+    }
+
+    .capability-card.no-video .cap-body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     .model-label {
@@ -1310,7 +1423,15 @@
     }
 
     .carousel-slide:not(.is-active) {
+      height: 0;
+      overflow: hidden;
       pointer-events: none;
+      visibility: hidden;
+    }
+
+    .carousel-slide.is-active {
+      height: auto;
+      visibility: visible;
     }
 
     .demo-carousel .case-study {
@@ -1592,8 +1713,26 @@
       padding: 32px 32px 48px;
       border-top: 1px solid var(--border);
       display: flex; justify-content: space-between; align-items: center;
+      gap: 18px;
       font-size: 0.82rem;
       color: var(--text-muted);
+    }
+
+    .footer-meta {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .page-views {
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .page-views strong {
+      color: var(--text-secondary);
+      font-weight: 600;
     }
 
     footer a { color: var(--text-secondary); }
@@ -1624,12 +1763,33 @@
       }
       .capability-grid {
         grid-template-columns: 1fr;
+        grid-template-rows: auto;
+      }
+      .capability-grid:not(.single-model) > .capability-card.featured {
+        grid-row: auto;
+      }
+      .capability-grid:not(.single-model) > .capability-card:not(.featured) {
+        grid-template-columns: 1fr;
+      }
+      .capability-grid:not(.single-model) > .capability-card:not(.featured) .video-slot,
+      .capability-grid.baseline-inline > .capability-card:not(.featured) .video-slot {
+        min-height: 0;
+        aspect-ratio: 16 / 9;
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
       }
       .sample-demo {
         flex-basis: 100%;
       }
       .capability-grid.single-model {
         grid-template-columns: 1fr;
+      }
+      .capability-grid.single-model .capability-card {
+        grid-template-columns: 1fr;
+      }
+      .capability-grid.single-model .capability-card .video-slot {
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
       }
       .hero-showcase {
         grid-template-columns: 1fr;
@@ -1655,7 +1815,13 @@
       .more-page {
         grid-template-columns: 1fr;
       }
-      .capability-grid { grid-template-columns: 1fr; }
+      .capability-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+      }
+      .capability-card.single-demo .cap-body {
+        grid-template-columns: 1fr;
+      }
       .hero-figure .figure-slot {
         min-height: 220px;
       }
@@ -1718,7 +1884,7 @@
   <div class="hero-meta">
     <span class="team-tag">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
-      Video Understanding Team @ Joy Future Academy, JD
+      Video Understanding Team of JoyAI-VL @ Joy Future Academy, JD
     </span>
     <span class="date">· June 10, 2026</span>
   </div>
@@ -1998,7 +2164,7 @@
                     </div>
                     <div class="capability-card">
                       <div class="video-slot">
-                        <video src="./assets/videos/cases/translation-interview-doubao_2k.mp4" controls preload="metadata" playsinline></video>
+                        <video src="./assets/videos/cases/translation-interview-doubao-landscape_2k.mp4" controls preload="metadata" playsinline></video>
                       </div>
                       <div class="cap-body">
                         <h4><span class="model-label"><span class="status-dot limited"></span>Doubao</span></h4>
@@ -2149,7 +2315,7 @@
                     </div>
                     <span class="case-tag">App guidance</span>
                   </div>
-                  <div class="capability-grid">
+                  <div class="capability-grid baseline-inline">
                     <div class="capability-card featured">
                       <div class="video-slot">
                         <video src="./assets/videos/cases/app-guide-joy_2k.mp4" controls preload="metadata" playsinline></video>
@@ -2188,7 +2354,7 @@
                     </div>
                     <span class="case-tag">App guidance</span>
                   </div>
-                  <div class="capability-grid">
+                  <div class="capability-grid baseline-inline">
                     <div class="capability-card featured">
                       <div class="video-slot">
                         <video src="./assets/videos/cases/app-zhuanzhuan-joy_2k.mp4" controls preload="metadata" playsinline></video>
@@ -2250,7 +2416,7 @@
                     </div>
                     <span class="case-tag">Live commentary</span>
                   </div>
-                  <div class="capability-grid">
+                  <div class="capability-grid baseline-inline">
                     <div class="capability-card featured">
                       <div class="video-slot">
                         <video src="./assets/videos/cases/livestream-pet-joy_2k.mp4" controls preload="metadata" playsinline></video>
@@ -2572,13 +2738,10 @@
                         <p>Gives an incorrect meatball count in the recorded comparison.</p>
                       </div>
                     </div>
-                    <div class="capability-card">
-                      <div class="video-slot">
-                        <div class="video-placeholder">Gemini comparison video to be added.</div>
-                      </div>
+                    <div class="capability-card no-video">
                       <div class="cap-body">
                         <h4><span class="model-label"><span class="status-dot limited"></span>Gemini</span></h4>
-                        <p>Gemini timed out in this case, so no matching recording is available yet.</p>
+                        <p>Gemini timed out in this case, so no matching recording is shown.</p>
                       </div>
                     </div>
                   </div>
@@ -2621,7 +2784,7 @@
                         <video src="./assets/videos/cases/background-case1-gdp_2k.mp4" controls preload="metadata" playsinline></video>
                       </div>
                       <div class="cap-body">
-                        <span class="model-label"><span class="status-dot good"></span>JoyAI-VL-Interaction only</span>
+                        <span class="model-label"><span class="status-dot good"></span>JoyAI-VL-Interaction</span>
                         <p><strong>Caption to refine:</strong> Keeps the conversation grounded in what is currently visible and reacts as the live scene changes.</p>
                       </div>
                     </div>
@@ -2666,7 +2829,7 @@
                         <video src="./assets/videos/cases/agent-delegation-phone-app_2k.mp4" controls preload="metadata" playsinline></video>
                       </div>
                       <div class="cap-body">
-                        <span class="model-label"><span class="status-dot good"></span>JoyAI-VL-Interaction only</span>
+                        <span class="model-label"><span class="status-dot good"></span>JoyAI-VL-Interaction</span>
                         <p><strong>Caption to refine:</strong> Keeps the live phone-screen interaction going while a background agent handles the harder app-related subtask.</p>
                       </div>
                     </div>
@@ -2687,7 +2850,7 @@
                         <video src="./assets/videos/cases/agent-delegation-mean-value-theorem_2k.mp4" controls preload="metadata" playsinline></video>
                       </div>
                       <div class="cap-body">
-                        <span class="model-label"><span class="status-dot good"></span>JoyAI-VL-Interaction only</span>
+                        <span class="model-label"><span class="status-dot good"></span>JoyAI-VL-Interaction</span>
                         <p><strong>Caption to refine:</strong> Delegates a math-heavy reasoning step to a background model, then brings the result back into the foreground interaction.</p>
                       </div>
                     </div>
@@ -2889,7 +3052,7 @@
       We are open-sourcing all of it, the 8B model, its training recipe, the data, and the
       deployable system, so anyone can stand up a real-time, always-present assistant and
       carry the interaction-model direction forward in the open. We expect the full release
-      to be complete by June 24, 2026, at
+      to be complete by <strong>June 20, 2026</strong>, at
       <a href="https://github.com/jd-opensource/JoyAI-VL-Interaction">https://github.com/jd-opensource/JoyAI-VL-Interaction</a>.
     </p>
 
@@ -3143,7 +3306,7 @@
       <button class="copy-btn" onclick="copyBibtex()">Copy</button>
       <pre><code>@techreport{joyai2026vlinteraction,
   title        = {JoyAI-VL-Interaction: Real-Time Vision-Language Interaction Intelligence},
-  author       = {{Video Understanding Team @ Joy Future Academy, JD}},
+  author       = {{Video Understanding Team of JoyAI-VL @ Joy Future Academy, JD}},
   institution  = {Joy Future Academy, JD},
   year         = {2026},
   month        = {June}
@@ -3157,7 +3320,10 @@
      FOOTER
      ================================================================ -->
 <footer>
-  <span>© 2026 Video Understanding Team, Joy Future Academy, JD</span>
+  <div class="footer-meta">
+    <span>© 2026 Video Understanding Team of JoyAI-VL, Joy Future Academy, JD</span>
+    <span class="page-views" id="pageViews" data-endpoint="">Page views <strong>--</strong></span>
+  </div>
   <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'}); return false;">Back to top ↑</a>
 </footer>
 
@@ -3301,14 +3467,19 @@
       targets.forEach(target => {
         target.classList.toggle('is-active', Number(target.dataset.carouselTarget) === index);
       });
-      tabs[index]?.scrollIntoView({ behavior: 'smooth', inline: 'nearest', block: 'nearest' });
+      const activeTab = tabs[index];
+      if (activeTab?.parentElement) {
+        activeTab.parentElement.scrollTo({
+          left: activeTab.offsetLeft - activeTab.parentElement.offsetLeft,
+          behavior: 'smooth'
+        });
+      }
     }
 
     tabs.forEach((tab, i) => tab.addEventListener('click', () => goTo(i)));
     targets.forEach(target => {
       target.addEventListener('click', () => {
         goTo(Number(target.dataset.carouselTarget) || 0);
-        carousel.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
     });
     prev?.addEventListener('click', () => goTo(index - 1));
@@ -3324,6 +3495,33 @@
       setTimeout(() => btn.textContent = 'Copy', 2000);
     });
   }
+
+  /* ── Lightweight page-view counter ── */
+  (() => {
+    const viewEl = document.getElementById('pageViews');
+    if (!viewEl) return;
+
+    const valueEl = viewEl.querySelector('strong');
+    const endpoint = viewEl.dataset.endpoint?.trim();
+    if (!endpoint || !valueEl) return;
+
+    const page = `${location.origin}${location.pathname}`;
+    const params = new URLSearchParams({ page });
+
+    fetch(`${endpoint}?${params.toString()}`, {
+      method: 'POST',
+      keepalive: true,
+      headers: { 'Accept': 'application/json' }
+    })
+      .then(response => response.ok ? response.json() : null)
+      .then(data => {
+        const views = Number(data?.views);
+        if (Number.isFinite(views) && views >= 0) {
+          valueEl.textContent = views.toLocaleString('en-US');
+        }
+      })
+      .catch(() => {});
+  })();
 
   /* ── Sidebar TOC: auto show/hide + scroll-spy ── */
   (() => {
