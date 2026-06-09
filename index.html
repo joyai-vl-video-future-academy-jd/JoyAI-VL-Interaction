@@ -921,6 +921,22 @@
       font-size: 0.92rem;
     }
 
+    .capability-card.portrait-demo {
+      grid-template-columns: minmax(230px, 0.4fr) minmax(280px, 0.6fr);
+      width: min(100%, 680px);
+    }
+
+    .capability-card.portrait-demo .video-slot {
+      aspect-ratio: 9 / 16;
+      max-height: 520px;
+      border-right: 1px solid var(--border);
+      background: #080808;
+    }
+
+    .capability-card.portrait-demo video {
+      object-fit: contain;
+    }
+
     .capability-card {
       border-radius: var(--radius);
       border: 1px solid var(--border);
@@ -2900,6 +2916,27 @@
                       <div class="cap-body">
                         <span class="model-label"><span class="status-dot good"></span>JoyAI-VL-Interaction</span>
                         <p>Delegate to the background model in real time to generate a GDP bar chart, output 'friend' each time a new person appears, and conduct multi-turn Q&A at the same time.</p>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <section class="sample-demo">
+                  <div class="sample-demo-header">
+                    <div>
+                      <span class="sample-name">Demo 02</span>
+                      <h4>Mobile Casual Chat</h4>
+                    </div>
+                    <span class="case-tag">Visual-driven interaction</span>
+                  </div>
+                  <div class="capability-grid single-model">
+                    <div class="capability-card featured single-demo portrait-demo">
+                      <div class="video-slot">
+                        <video src="./assets/videos/visual-driven-mobile-chat_2k.mp4" poster="./assets/images/visual-driven-mobile-chat-poster.jpg" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <span class="model-label"><span class="status-dot good"></span>JoyAI-VL-Interaction</span>
+                        <p>Maintains a casual mobile interaction while staying grounded in the live camera view and responding as the visible scene changes.</p>
                       </div>
                     </div>
                   </div>
