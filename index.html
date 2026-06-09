@@ -46,7 +46,7 @@
       --bg-cover:      linear-gradient(135deg, #ffffff 0%, #fffdfb 70%, #fff6f3 100%);
 
       --text-primary:  #25211f;
-      --text-secondary:#69625d;
+      --text-secondary:#302b28;
       --text-muted:    #a79d96;
 
       --accent:        #E2231A;
@@ -328,25 +328,6 @@
       animation: fadeUp 0.7s ease 0.3s both;
     }
 
-    .hero-cover .cover-placeholder {
-      width: 100%;
-      aspect-ratio: 21 / 9;
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--border);
-      background: var(--bg-cover);
-      display: flex; align-items: center; justify-content: center;
-      color: var(--text-muted);
-      font-size: 0.9rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-cover .cover-placeholder::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: radial-gradient(ellipse at 30% 50%, var(--accent-glow) 0%, transparent 60%);
-    }
-
     .hero-cover img {
       width: 100%;
       border-radius: var(--radius-lg);
@@ -445,6 +426,7 @@
       font-family: var(--font-display);
       font-size: 1.85rem;
       font-weight: 700;
+      color: var(--accent);
       letter-spacing: -0.03em;
       line-height: 1.2;
       margin-bottom: 24px;
@@ -470,11 +452,11 @@
       font-weight: 600;
       margin-top: 40px;
       margin-bottom: 16px;
-      color: var(--text-primary);
+      color: var(--accent);
     }
 
     .section p {
-      color: var(--text-secondary);
+      color: var(--text-primary);
       margin-bottom: 20px;
       font-size: 1rem;
       line-height: 1.85;
@@ -484,6 +466,22 @@
     .section p strong {
       color: var(--text-primary);
       font-weight: 600;
+    }
+
+    .section p .section-lead {
+      display: inline;
+      margin-right: 8px;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .accent-word {
+      color: var(--accent);
+      font-family: inherit;
+      font-size: inherit;
+      font-style: normal;
+      font-weight: inherit;
+      letter-spacing: inherit;
     }
 
     /* Placeholder block for empty content */
@@ -531,13 +529,14 @@
       letter-spacing: -0.02em;
     }
 
-    .case-index {
+    .sample-name {
       display: inline-block;
       margin-bottom: 6px;
-      color: var(--text-muted);
-      font-size: 0.68rem;
+      color: var(--accent-light);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
       font-weight: 700;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
     }
 
@@ -551,6 +550,142 @@
       font-size: 0.72rem;
       font-weight: 600;
       white-space: nowrap;
+    }
+
+    .demo-carousel .case-study {
+      margin-top: 26px;
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .demo-carousel .case-study > .case-header,
+    .demo-carousel .case-study > p,
+    .demo-carousel .case-study > .prompt-box {
+      display: none;
+    }
+
+    .sample-demo-tabs {
+      display: flex;
+      gap: 8px;
+      margin: 0 0 14px;
+      padding-bottom: 2px;
+      overflow-x: auto;
+    }
+
+    .sample-demo-tab {
+      appearance: none;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      padding: 8px 14px;
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: none;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+    }
+
+    .sample-demo-tab:hover,
+    .sample-demo-tab.is-active {
+      color: #fff;
+      border-color: var(--accent);
+      background: var(--accent);
+    }
+
+    .capability-demo-stack {
+      display: flex;
+      gap: 18px;
+      margin-top: 24px;
+      padding: 2px 2px 14px;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scroll-padding-inline: 2px;
+      scroll-snap-type: x mandatory;
+      scrollbar-color: rgba(226, 35, 26, 0.45) transparent;
+    }
+
+    .sample-demo-tabs + .capability-demo-stack {
+      margin-top: 0;
+    }
+
+    .capability-demo-stack::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .capability-demo-stack::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .capability-demo-stack::-webkit-scrollbar-thumb {
+      border-radius: 999px;
+      background: rgba(226, 35, 26, 0.35);
+    }
+
+    .sample-demo {
+      flex: 0 0 100%;
+      padding: 22px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.56);
+      scroll-snap-align: start;
+    }
+
+    :root[data-theme="dark"] .sample-demo {
+      background: rgba(255, 255, 255, 0.025);
+    }
+
+    .sample-demo-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 10px;
+    }
+
+    .sample-demo-header > div {
+      min-width: 0;
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .sample-demo-header .sample-name {
+      display: none;
+      margin-bottom: 0;
+    }
+
+    .sample-demo-header .case-tag {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .sample-demo-header h4 {
+      margin: 0;
+      color: var(--text-primary);
+      font-size: 1.02rem;
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+    }
+
+    .sample-instruction {
+      margin: 0 0 18px;
+      padding: 14px 16px;
+      border-radius: calc(var(--radius) - 2px);
+      border: 1px solid var(--border);
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+
+    .sample-demo .capability-grid,
+    .sample-demo .capability-grid.single-model {
+      margin-bottom: 0;
     }
 
     .prompt-box {
@@ -583,37 +718,64 @@
     }
 
     .capability-summary-item {
-      min-height: 168px;
-      padding: 22px 22px 24px;
+      min-height: 148px;
+      padding: 20px 22px 22px;
       border-radius: var(--radius);
       border: 1px solid var(--border);
       background: var(--bg-card);
       box-shadow: 0 12px 36px rgba(64, 52, 46, 0.055);
+      cursor: pointer;
+      text-align: left;
+      font-family: var(--font-body);
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s, transform 0.2s;
+      appearance: none;
+    }
+
+    .capability-summary-item:hover,
+    .capability-summary-item.is-active {
+      border-color: var(--border-hover);
+      background: var(--bg-card-hover);
+      box-shadow: var(--soft-shadow);
+    }
+
+    .capability-summary-item:hover {
+      transform: translateY(-2px);
+    }
+
+    .capability-summary-item.is-active {
+      outline: 2px solid rgba(226, 35, 26, 0.18);
+      outline-offset: 2px;
     }
 
     .capability-summary-item span {
-      display: block;
-      margin-bottom: 16px;
+      display: inline;
+      margin-right: 10px;
+      margin-bottom: 0;
       color: var(--accent-light);
       font-family: var(--font-mono);
-      font-size: 0.76rem;
+      font-size: 0.78rem;
       font-weight: 700;
       letter-spacing: 0.08em;
     }
 
     .capability-summary-item strong {
-      display: block;
-      margin-bottom: 10px;
+      display: inline;
+      margin-bottom: 0;
       color: var(--text-primary);
-      font-size: 1rem;
+      font-size: 1.02rem;
       line-height: 1.45;
     }
 
     .capability-summary-item p {
-      margin: 0;
+      margin: 12px 0 0;
       color: var(--text-secondary);
-      font-size: 0.86rem;
-      line-height: 1.7;
+      font-size: 0.85rem;
+      line-height: 1.65;
+    }
+
+    .feature-heading {
+      display: block;
+      margin-bottom: 0;
     }
 
     .capacity-card {
@@ -669,6 +831,40 @@
       grid-template-columns: repeat(3, 1fr);
       gap: 16px;
       margin: 24px 0;
+    }
+
+    .capability-grid.single-model {
+      grid-template-columns: repeat(auto-fit, minmax(320px, 560px));
+      justify-content: center;
+    }
+
+    .capability-grid.single-model .capability-card .video-slot {
+      aspect-ratio: 16 / 9;
+    }
+
+    .capability-grid.single-model .capability-card {
+      width: 100%;
+      max-width: 560px;
+      justify-self: center;
+    }
+
+    .capability-card.single-demo .cap-body {
+      display: grid;
+      gap: 8px;
+    }
+
+    .capability-card.single-demo .demo-kicker {
+      color: var(--accent-light);
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .capability-card.single-demo .model-label {
+      color: var(--text-secondary);
+      font-size: 0.82rem;
     }
 
     .capability-card {
@@ -764,6 +960,403 @@
 
     .status-dot.limited {
       background: var(--accent-2);
+    }
+
+    .core-grid,
+    .method-grid,
+    .more-grid {
+      display: grid;
+      gap: 16px;
+      margin: 30px 0 36px;
+    }
+
+    .core-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .method-grid,
+    .more-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .core-item,
+    .method-card,
+    .more-card {
+      min-height: 160px;
+      padding: 22px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      box-shadow: 0 12px 36px rgba(64, 52, 46, 0.045);
+    }
+
+    .core-item span,
+    .method-card span,
+    .more-card span {
+      display: block;
+      margin-bottom: 12px;
+      color: var(--accent-light);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .core-item strong,
+    .method-card strong,
+    .more-card strong {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--text-primary);
+      font-size: 1rem;
+      line-height: 1.45;
+    }
+
+    .core-item p,
+    .method-card p,
+    .more-card p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.86rem;
+      line-height: 1.7;
+    }
+
+    .video-placeholder {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: var(--bg-video);
+      color: rgba(255, 255, 255, 0.64);
+      text-align: center;
+      font-size: 0.82rem;
+      line-height: 1.6;
+    }
+
+    .benchmark-summary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin: 28px 0 10px;
+    }
+
+    .benchmark-summary .stat-item {
+      text-align: left;
+    }
+
+    .benchmark-summary .stat-value {
+      font-size: 2rem;
+    }
+
+    .benchmark-title {
+      margin-top: 30px;
+      margin-bottom: 8px;
+      color: var(--text-primary);
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .more-card .video-slot {
+      width: calc(100% + 44px);
+      margin: -22px -22px 18px;
+      aspect-ratio: 16 / 9;
+      background: var(--bg-video);
+      overflow: hidden;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .more-card video {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+      background: var(--bg-video);
+    }
+
+    .core-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      margin: 38px 0 44px;
+    }
+
+    .core-item {
+      position: relative;
+      min-height: 176px;
+      padding: 24px 26px 26px;
+      overflow: hidden;
+      border-color: rgba(226, 35, 26, 0.20);
+      background:
+        linear-gradient(135deg, var(--accent-dim), transparent 52%),
+        var(--bg-card);
+      box-shadow: 0 18px 48px rgba(64, 52, 46, 0.08);
+    }
+
+    .core-item::after {
+      content: '';
+      position: absolute;
+      inset: auto 24px 22px auto;
+      width: 54px;
+      height: 4px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      opacity: 0.8;
+    }
+
+    .core-item span {
+      display: inline;
+      margin-right: 10px;
+      margin-bottom: 0;
+      color: var(--accent);
+      font-size: 0.82rem;
+    }
+
+    .core-item strong {
+      display: inline;
+      margin-bottom: 0;
+      font-size: 1.04rem;
+      letter-spacing: -0.02em;
+    }
+
+    .core-item p {
+      margin-top: 13px;
+      font-size: 0.9rem;
+    }
+
+    .core-heading {
+      display: block;
+    }
+
+    .hero-showcase {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      margin: 0;
+      align-items: stretch;
+    }
+
+    .hero-figure,
+    .hero-agent {
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      overflow: hidden;
+      box-shadow: 0 14px 42px rgba(64, 52, 46, 0.06);
+    }
+
+    .hero-figure .figure-slot {
+      min-height: 520px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+      background:
+        linear-gradient(135deg, var(--accent-dim), transparent 44%),
+        var(--bg-secondary);
+      color: var(--text-muted);
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    .hero-figure img {
+      width: 100%;
+      display: block;
+    }
+
+    .hero-agent .video-slot {
+      width: 100%;
+      aspect-ratio: 21 / 9;
+      background: var(--bg-video);
+    }
+
+    .hero-agent video {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+      background: var(--bg-video);
+    }
+
+    .hero-showcase-body {
+      padding: 20px 22px 22px;
+    }
+
+    .hero-showcase-body span {
+      display: block;
+      margin-bottom: 9px;
+      color: var(--accent-light);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .hero-showcase-body strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--text-primary);
+      font-size: 1rem;
+      line-height: 1.45;
+    }
+
+    .hero-showcase-body p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      line-height: 1.7;
+    }
+
+    .demo-carousel,
+    .more-carousel {
+      margin: 34px 0 10px;
+    }
+
+    .capability-subsection {
+      margin-top: 30px;
+      padding-top: 8px;
+      border-top: 0;
+    }
+
+    .demo-carousel .carousel-toolbar {
+      justify-content: flex-end;
+      margin-bottom: 12px;
+    }
+
+    .carousel-toolbar {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .carousel-tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: thin;
+    }
+
+    .carousel-tab,
+    .carousel-nav button {
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      font-family: var(--font-body);
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s, background 0.2s, transform 0.2s;
+    }
+
+    .carousel-tab {
+      flex: 0 0 auto;
+      padding: 8px 13px;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .carousel-tab:hover,
+    .carousel-nav button:hover {
+      border-color: var(--border-hover);
+      color: var(--text-primary);
+      background: var(--accent-dim);
+    }
+
+    .carousel-tab.is-active {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .carousel-nav {
+      display: flex;
+      gap: 8px;
+      flex: 0 0 auto;
+    }
+
+    .carousel-nav button {
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      font-size: 1.1rem;
+      line-height: 1;
+    }
+
+    .carousel-nav button:hover {
+      transform: translateY(-1px);
+    }
+
+    .carousel-viewport {
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .carousel-track {
+      display: flex;
+      align-items: flex-start;
+      transition: transform 0.36s cubic-bezier(0.23, 1, 0.32, 1);
+      will-change: transform;
+    }
+
+    .carousel-slide {
+      flex: 0 0 100%;
+      min-width: 100%;
+      padding-right: 1px;
+    }
+
+    .carousel-slide:not(.is-active) {
+      pointer-events: none;
+    }
+
+    .demo-carousel .case-study {
+      margin-top: 0;
+    }
+
+    .more-page {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .more-card.large {
+      min-height: 100%;
+      padding: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .more-card.large .video-slot {
+      width: 100%;
+      margin: 0;
+      aspect-ratio: 16 / 9;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .more-card.large .more-body {
+      padding: 22px;
+    }
+
+    .benchmark-callout {
+      margin: 28px 0 26px;
+      color: var(--text-secondary);
+      font-size: 1.02rem;
+      line-height: 1.9;
+    }
+
+    .benchmark-score {
+      color: var(--accent);
+      font-family: var(--font-display);
+      font-size: 1.65rem;
+      font-weight: 800;
+      line-height: 1;
+      white-space: nowrap;
     }
 
     /* ================================================================
@@ -898,6 +1491,17 @@
       line-height: 2;
     }
 
+    .authors-block .author-row {
+      margin: 2px 0;
+    }
+
+    .authors-block .author-list sup,
+    .authors-block .affiliations sup {
+      color: var(--accent);
+      font-size: 0.7em;
+      font-weight: 700;
+    }
+
     .authors-block .author-list .lead {
       color: var(--text-primary);
       font-weight: 600;
@@ -910,6 +1514,22 @@
       font-size: 0.8rem;
       color: var(--text-muted);
       line-height: 1.8;
+    }
+
+    .authors-block .institution {
+      color: var(--text-primary);
+      font-size: 0.98rem;
+      font-weight: 600;
+    }
+
+    .authors-block .contribution-note,
+    .authors-block .contribution-note sup {
+      color: var(--text-primary);
+    }
+
+    .authors-block .contribution-note {
+      display: inline-block;
+      margin-top: 4px;
     }
 
     /* ================================================================
@@ -1000,7 +1620,25 @@
        ================================================================ */
     @media (max-width: 980px) {
       .capability-summary {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .capability-grid {
         grid-template-columns: 1fr;
+      }
+      .sample-demo {
+        flex-basis: 100%;
+      }
+      .capability-grid.single-model {
+        grid-template-columns: 1fr;
+      }
+      .hero-showcase {
+        grid-template-columns: 1fr;
+      }
+      .core-grid,
+      .method-grid,
+      .more-grid,
+      .benchmark-summary {
+        grid-template-columns: repeat(2, 1fr);
       }
     }
 
@@ -1009,8 +1647,34 @@
       .hero { padding: 110px 20px 32px; }
       .hero-cover { padding: 0 20px; }
       .content { padding: 0 20px; }
+      .core-grid,
+      .method-grid,
+      .more-grid,
+      .benchmark-summary,
+      .capability-summary,
+      .more-page {
+        grid-template-columns: 1fr;
+      }
       .capability-grid { grid-template-columns: 1fr; }
+      .hero-figure .figure-slot {
+        min-height: 220px;
+      }
       .case-header { flex-direction: column; }
+      .sample-demo {
+        padding: 18px;
+      }
+      .sample-demo-header {
+        align-items: flex-start;
+      }
+      .carousel-toolbar {
+        flex-direction: column;
+      }
+      .carousel-tabs {
+        width: 100%;
+      }
+      .carousel-nav {
+        align-self: flex-end;
+      }
       .stats-row { grid-template-columns: 1fr; }
       footer { flex-direction: column; gap: 12px; text-align: center; padding: 32px 20px; }
     }
@@ -1029,9 +1693,8 @@
     <div class="nav-actions">
       <ul class="nav-links">
         <li><a href="#capabilities">Capabilities</a></li>
-        <li><a href="#demos">Demos</a></li>
         <li><a href="#approach">Approach</a></li>
-        <li><a href="#benchmarks">Benchmarks</a></li>
+        <li><a href="#evaluation">Evaluation</a></li>
         <li><a href="#authors">Authors</a></li>
         <li><a href="#citation">BibTeX</a></li>
       </ul>
@@ -1057,14 +1720,13 @@
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
       Video Understanding Team @ Joy Future Academy, JD
     </span>
-    <span class="date">· June 2026</span>
+    <span class="date">· June 10, 2026</span>
   </div>
 
   <h1>JoyAI-VL-<em>Interaction</em></h1>
 
   <p class="hero-subtitle">
-    A real-time video-language interaction model that combines live visual streams
-    with user intent, then responds proactively at the right moment.
+    An Open Real-time Video-Language Interaction
   </p>
 
   <div class="hero-buttons">
@@ -1077,7 +1739,7 @@
       <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
       Code
     </a>
-    <a href="#demos" class="btn btn-outline">Demos ↓</a>
+    <a href="#capabilities" class="btn btn-outline">Capabilities ↓</a>
   </div>
 </header>
 
@@ -1085,10 +1747,9 @@
      HERO COVER IMAGE
      ================================================================ -->
 <div class="hero-cover">
-  <!-- ✏️ 替换为你的 cover 图片: <img src="./assets/images/cover.jpg" alt="JoyAI-VL-Interaction" /> -->
-  <div class="cover-placeholder">
-    <span>✏️ 在此放置 Hero 封面图 (建议 21:9 比例)</span>
-  </div>
+  <figure class="hero-figure">
+    <img src="./assets/images/overview.png" alt="JoyAI-VL-Interaction overview">
+  </figure>
 </div>
 
 <!-- ================================================================
@@ -1099,10 +1760,9 @@
   <ul class="toc-list">
     <li><a href="#introduction" data-section="introduction">Introduction</a></li>
     <li><a href="#capabilities" data-section="capabilities">Capabilities</a></li>
-    <li><a href="#demos" data-section="demos">Demos</a></li>
     <li><a href="#approach" data-section="approach">Our Approach</a></li>
-    <li><a href="#benchmarks" data-section="benchmarks">Benchmarks</a></li>
-    <li><a href="#limitations" data-section="limitations">Limitations</a></li>
+    <li><a href="#evaluation" data-section="evaluation">Evaluation</a></li>
+    <li><a href="#limitations" data-section="limitations">Conclusion</a></li>
     <li><a href="#authors" data-section="authors">Authors</a></li>
     <li><a href="#citation" data-section="citation">Citation</a></li>
   </ul>
@@ -1129,10 +1789,10 @@
       We think the next step is a model that's present like a person: one that watches what's happening now, decides on its own when a moment is worth a word, speaks up when it matters and stays quiet when it doesn't, and hands off to a stronger model when a problem is hard. Thinking Machines Lab recently named this an interaction model. We believe it's the right direction, and we wanted to make it something anyone can build on.
     </p>
     <p>
-      So today we're releasing JoyAI-VL-Interaction: an 8B-scale, vision-first interaction model, released together with its training recipe, its data, and a complete, deployable system, all fully open. Point a webcam or a livestream at it and it's immediately present in the scene, watching and responding in real time. Because the model is compact and the system runs on standard infrastructure, anyone can stand up their own always-present assistant from a single repository.
+      So today we're releasing JoyAI-VL-Interaction: an 8B-scale, vision-first interaction model, released together with its training recipe, its data, and a complete, deployable system, all fully OPEN. Point a webcam or a livestream at it and it's immediately present in the scene, watching and responding in real time. Because the model is compact and the system runs on standard infrastructure, anyone can stand up their own always-present assistant from a single repository.
     </p>
     <p>
-      In head-to-head tests against the in-app video-call assistants of Doubao and Gemini, across eight everyday scenarios from live commentary and monitoring to real-time memory, human raters preferred JoyAI-VL-Interaction by a wide margin on both what it says and when it says it. And along the way, the same recipe gave rise to abilities we never trained for, like guiding a shopper through changing app screens or improvising a lecture from a slide deck.
+      In head-to-head tests against the in-app video-call assistants of Doubao and Gemini, across 58 recorded visual-interaction cases from live commentary and monitoring to real-time memory, human raters preferred JoyAI-VL-Interaction by a wide margin on both what it says and when it says it. And along the way, the same recipe gave rise to abilities we never trained for, like guiding a shopper through changing app screens or improvising a lecture from a slide deck.
     </p>
     <p>
       Our goal is simple: to take what interaction models make possible and put it in everyone's hands, helping move multimodal AI from turn-based dialogue toward genuine, real-time presence, openly and together. Here's what that looks like.
@@ -1146,19 +1806,22 @@
       earlier context.
     </p> -->
 
-    <!-- 高亮数据行，展示关键指标 -->
-    <div class="stats-row">
-      <div class="stat-item">
-        <div class="stat-value">3</div>
-        <div class="stat-label">Capability showcases</div>
+    <div class="core-grid">
+      <div class="core-item">
+        <div class="core-heading"><span>01</span><strong>Real-time presence</strong></div>
+        <p>It stays present in a live stream for hours, watching every second and responding in under a second, instead of waking up only when you ask.</p>
       </div>
-      <div class="stat-item">
-        <div class="stat-value">5</div>
-        <div class="stat-label">Head-to-head demos</div>
+      <div class="core-item">
+        <div class="core-heading"><span>02</span><strong>Vision-triggered proactivity</strong></div>
+        <p>It decides for itself, from what it sees, when a moment is worth a word, speaking up the instant something matters and staying quiet when nothing does.</p>
       </div>
-      <div class="stat-item">
-        <div class="stat-value">12h</div>
-        <div class="stat-label">Long-context memory target</div>
+      <div class="core-item">
+        <div class="core-heading"><span>03</span><strong>Agent delegation</strong></div>
+        <p>When a problem outgrows real-time inference, it hands the task to a background agent or API, even one that acts in the digital world, and folds the answer back in while it keeps watching.</p>
+      </div>
+      <div class="core-item">
+        <div class="core-heading"><span>04</span><strong>Fully <em class="accent-word">OPEN</em> stack</strong></div>
+        <p>We release everything, the 8B model, its training recipe, the data, and a complete deployable system, so anyone can run, reproduce, and build on it from a single repository.</p>
       </div>
     </div>
   </section>
@@ -1170,405 +1833,1021 @@
     <h2>Capabilities</h2>
 
     <p>
-      Making interaction a native model behavior unlocks capabilities that are hard to
-      reproduce with a turn-based assistant or an external polling harness. JoyAI-VL-Interaction
-      continuously watches the stream, decides each second whether to stay silent, respond,
-      or delegate, and stays usable as a complete deployable system over long-running video.
+      Once interactivity is trained into the model itself, rather than bolted on by an
+      external harness, a whole class of capabilities comes naturally. These are exactly
+      the things a turn-based assistant can't do well, however fast it answers: being
+      present, acting at the right moment, sensing time, and remembering across a long
+      stream. Here are nine of them, each a natural advantage of building interaction into
+      the model. And for every demo below, we include real screen recordings of Doubao's
+      and Gemini's video-call assistants alongside ours, so the difference in interaction
+      style between an interaction model and a turn-based one is plain to see.
     </p>
 
     <div class="capability-summary">
-      <div class="capability-summary-item">
-        <span>01</span>
-        <strong>Autonomous interaction</strong>
+      <button class="capability-summary-item is-active" type="button" data-carousel-target="0">
+        <div class="feature-heading"><span>01</span><strong>Real-time translation</strong></div>
         <p>
-          Combines live visual context with the user's intent, then speaks at the right
-          moment instead of waiting for another explicit question.
+          Translates on-screen subtitles and text in real time, keeping pace with the video
+          as it plays rather than with a single frame.
         </p>
-      </div>
-      <div class="capability-summary-item">
-        <span>02</span>
-        <strong>Real-time response</strong>
+      </button>
+      <button class="capability-summary-item" type="button" data-carousel-target="1">
+        <div class="feature-heading"><span>02</span><strong>Monitoring and alerting</strong></div>
         <p>
-          Observes the current scene continuously and can react within sub-second timing
-          when a watched event or object appears.
+          Watches a live feed and raises the alert within a second of an emergency, right
+          when it happens.
         </p>
-      </div>
-      <div class="capability-summary-item">
-        <span>03</span>
-        <strong>Long-term memory</strong>
+      </button>
+      <button class="capability-summary-item" type="button" data-carousel-target="2">
+        <div class="feature-heading"><span>03</span><strong>App guidance</strong></div>
         <p>
-          Retains earlier visual details across long videos and uses that memory when the
-          user asks about something that has already passed.
+          Follows your phone screen as you use an app and walks you through the task in step
+          with what's on it right now.
         </p>
-      </div>
+      </button>
+      <button class="capability-summary-item" type="button" data-carousel-target="3">
+        <div class="feature-heading"><span>04</span><strong>Live commentary</strong></div>
+        <p>
+          Narrates what's on screen as it unfolds, from a slide deck to a live match, keeping
+          up in real time.
+        </p>
+      </button>
+      <button class="capability-summary-item" type="button" data-carousel-target="4">
+        <div class="feature-heading"><span>05</span><strong>Real-time counting</strong></div>
+        <p>
+          Counts target objects or actions on the fly, updating the tally each time one
+          appears.
+        </p>
+      </button>
+      <button class="capability-summary-item" type="button" data-carousel-target="5">
+        <div class="feature-heading"><span>06</span><strong>Time awareness</strong></div>
+        <p>
+          Acts on its own sense of elapsed time, speaking on a set interval or reminding you
+          a few seconds later.
+        </p>
+      </button>
+      <button class="capability-summary-item" type="button" data-carousel-target="6">
+        <div class="feature-heading"><span>07</span><strong>Long visual memory (5+ min)</strong></div>
+        <p>
+          Holds onto useful details from minutes earlier in the stream and brings them back
+          when they matter.
+        </p>
+      </button>
+      <button class="capability-summary-item" type="button" data-carousel-target="7">
+        <div class="feature-heading"><span>08</span><strong>Visual-driven interaction</strong></div>
+        <p>
+          Reads changes in the scene to interact more naturally, like greeting a friend the
+          moment they step into view.
+        </p>
+      </button>
+      <button class="capability-summary-item" type="button" data-carousel-target="8">
+        <div class="feature-heading"><span>09</span><strong>Agent delegation</strong></div>
+        <p>
+          Hands hard subtasks to a background model or agent, and keeps watching and
+          interacting while the answer comes back.
+        </p>
+      </button>
     </div>
 
-    <div class="capacity-grid">
-      <article class="capacity-card">
-        <div class="video-slot">
-          <video src="./assets/videos/capability-slides-commentary.mp4" controls preload="metadata" playsinline></video>
+    <div class="demo-carousel" data-carousel>
+      <div class="carousel-toolbar">
+        <div class="carousel-nav" aria-label="Capability carousel controls">
+          <button type="button" data-carousel-prev aria-label="Previous capability demo">‹</button>
+          <button type="button" data-carousel-next aria-label="Next capability demo">›</button>
         </div>
-        <div class="capacity-body">
-          <span class="capacity-kicker">Emergent Interaction</span>
-          <h3>Improvised Slide Commentary</h3>
-          <p>
-            The model follows a changing slide deck and gives a live explanation without
-            a scripted prompt for each page, showing watch-and-interact behavior that
-            transfers beyond the supervised scenarios.
-          </p>
-        </div>
-      </article>
+      </div>
 
-      <article class="capacity-card">
-        <div class="video-slot">
-          <video src="./assets/videos/capability-vending-counting.mp4" controls preload="metadata" playsinline></video>
-        </div>
-        <div class="capacity-body">
-          <span class="capacity-kicker">Continuous Tracking</span>
-          <h3>Real-Time Counting From Video</h3>
-          <p>
-            The model tracks visual changes over time and updates its response as the
-            scene unfolds, a building block for counting, monitoring, sports commentary,
-            and other live visual-control tasks.
-          </p>
-        </div>
-      </article>
+      <div class="carousel-viewport">
+        <div class="carousel-track">
+          <div class="carousel-slide is-active">
+            <article class="case-study" id="realtime-translation">
+              <div class="case-header">
+                <div>
+                  <span class="sample-name">Capability 01</span>
+                  <h3>Real-time Translation</h3>
+                </div>
+                <span class="case-tag">Real-time translation</span>
+              </div>
 
-      <article class="capacity-card">
-        <div class="video-slot">
-          <video src="./assets/videos/capability-supermarket-long-memory.mp4" controls preload="metadata" playsinline></video>
+              <p>
+                A translation assistant has to keep listening and watching as the scene changes,
+                rather than producing one answer for the frame where the task is issued.
+              </p>
+
+              <div class="prompt-box">
+                <strong>Task:</strong> Translate the ongoing conversation as the animation unfolds.
+              </div>
+
+              <div class="capability-demo-stack">
+                <section class="sample-demo">
+                  <div class="sample-demo-header">
+                    <div>
+                      <span class="sample-name">Demo 01</span>
+                      <h4>Pharmacy Visit Animation</h4>
+                    </div>
+                    <span class="case-tag">Real-time translation</span>
+                  </div>
+                  <div class="capability-grid">
+                    <div class="capability-card featured">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/translation-pharmacy-joy_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot good"></span>JoyAI-VL-Interaction</span></h4>
+                        <p>Completes the task as real-time translation, continuing as the scene plays instead of answering only once.</p>
+                      </div>
+                    </div>
+                    <div class="capability-card">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/translation-pharmacy-doubao_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot limited"></span>Doubao</span></h4>
+                        <p>Translates only the beginning and the ending in this case, missing the continuous real-time behavior.</p>
+                      </div>
+                    </div>
+                    <div class="capability-card">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/translation-pharmacy-gemini_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot limited"></span>Gemini</span></h4>
+                        <p>Does not translate the dialogue in this case and continues replying in English.</p>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <section class="sample-demo">
+                  <div class="sample-demo-header">
+                    <div>
+                      <span class="sample-name">Demo 02</span>
+                      <h4>Street Interview Translation</h4>
+                    </div>
+                    <span class="case-tag">Real-time translation</span>
+                  </div>
+                  <div class="capability-grid">
+                    <div class="capability-card featured">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/translation-interview-joy_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot good"></span>JoyAI-VL-Interaction</span></h4>
+                        <p>Continues translating as the interview unfolds instead of stopping after the initial visible frame.</p>
+                      </div>
+                    </div>
+                    <div class="capability-card">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/translation-interview-doubao_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot limited"></span>Doubao</span></h4>
+                        <p>Focuses on the current frame and does not sustain translation through the later dialogue.</p>
+                      </div>
+                    </div>
+                    <div class="capability-card">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/translation-interview-gemini_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot limited"></span>Gemini</span></h4>
+                        <p>Also behaves like a turn-based answerer rather than a continuous translation assistant.</p>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </article>
+          </div>
+
+          <div class="carousel-slide">
+            <article class="case-study" id="realtime-alerting">
+              <div class="case-header">
+                <div>
+                  <span class="sample-name">Capability 02</span>
+                  <h3>Monitoring and Alerting</h3>
+                </div>
+                <span class="case-tag">Monitoring and alerting</span>
+              </div>
+
+              <p>
+                Alerting is the clearest test of whether a model is genuinely present. The right
+                response is neither early nor late: it should arrive when the watched event occurs.
+              </p>
+
+              <div class="prompt-box">
+                <strong>Task:</strong> Warn immediately when the yellow-card event appears.
+              </div>
+
+              <div class="capability-demo-stack">
+                <section class="sample-demo">
+                  <div class="sample-demo-header">
+                    <div>
+                      <span class="sample-name">Demo 01</span>
+                      <h4>Yellow-card Alert</h4>
+                    </div>
+                    <span class="case-tag">Monitoring and alerting</span>
+                  </div>
+                  <div class="capability-grid">
+                    <div class="capability-card featured">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/alert-yellow-card-joy_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot good"></span>JoyAI-VL-Interaction</span></h4>
+                        <p>Responds quickly when the visual warning appears.</p>
+                      </div>
+                    </div>
+                    <div class="capability-card">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/alert-yellow-card-doubao_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot limited"></span>Doubao</span></h4>
+                        <p>Responds roughly 20 seconds later in this case, which is too slow for a monitoring task.</p>
+                      </div>
+                    </div>
+                    <div class="capability-card">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/alert-yellow-card-gemini_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot limited"></span>Gemini</span></h4>
+                        <p>Stays focused on earlier context rather than monitoring the later visual event.</p>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <section class="sample-demo">
+                  <div class="sample-demo-header">
+                    <div>
+                      <span class="sample-name">Demo 02</span>
+                      <h4>Fall Detection Alert</h4>
+                    </div>
+                    <span class="case-tag">Monitoring and alerting</span>
+                  </div>
+                  <div class="capability-grid">
+                    <div class="capability-card featured">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/alert-fall-joy_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot good"></span>JoyAI-VL-Interaction</span></h4>
+                        <p>Sends the warning immediately when the fall occurs.</p>
+                      </div>
+                    </div>
+                    <div class="capability-card">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/alert-fall-doubao_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot limited"></span>Doubao</span></h4>
+                        <p>Responds several seconds late, weakening its usefulness for safety monitoring.</p>
+                      </div>
+                    </div>
+                    <div class="capability-card">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/alert-fall-gemini_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot limited"></span>Gemini</span></h4>
+                        <p>Treats the task like backward-looking video QA rather than a live alerting task.</p>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </article>
+          </div>
+
+          <div class="carousel-slide">
+            <article class="case-study" id="app-guidance">
+              <div class="case-header">
+                <div>
+                  <span class="sample-name">Capability 03</span>
+                  <h3>App Guidance</h3>
+                </div>
+                <span class="case-tag">App guidance</span>
+              </div>
+
+              <p>
+                App guidance requires a model to follow a user's intent across changing screens,
+                keeping the goal alive instead of describing one snapshot.
+              </p>
+
+              <div class="prompt-box">
+                <strong>Task:</strong> Help the user browse an app and choose a suitable product under a budget.
+              </div>
+
+              <div class="capability-demo-stack">
+                <section class="sample-demo">
+                  <div class="sample-demo-header">
+                    <div>
+                      <span class="sample-name">Demo 01</span>
+                      <h4>Shopping App Guidance</h4>
+                    </div>
+                    <span class="case-tag">App guidance</span>
+                  </div>
+                  <div class="capability-grid">
+                    <div class="capability-card featured">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/app-guide-joy_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot good"></span>JoyAI-VL-Interaction</span></h4>
+                        <p>Responds promptly and keeps guiding as the app screen changes.</p>
+                      </div>
+                    </div>
+                    <div class="capability-card">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/app-guide-doubao_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot limited"></span>Doubao</span></h4>
+                        <p>Does not proactively continue the guidance in the recorded comparison.</p>
+                      </div>
+                    </div>
+                    <div class="capability-card">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/app-guide-gemini_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot limited"></span>Gemini</span></h4>
+                        <p>Also lacks proactive follow-up in the recorded comparison.</p>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <section class="sample-demo">
+                  <div class="sample-demo-header">
+                    <div>
+                      <span class="sample-name">Demo 02</span>
+                      <h4>Zhuanzhuan App Commentary</h4>
+                    </div>
+                    <span class="case-tag">App guidance</span>
+                  </div>
+                  <div class="capability-grid">
+                    <div class="capability-card featured">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/app-zhuanzhuan-joy_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot good"></span>JoyAI-VL-Interaction</span></h4>
+                        <p>Keeps up with the changing phone screen and comments at the requested rhythm.</p>
+                      </div>
+                    </div>
+                    <div class="capability-card">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/app-zhuanzhuan-doubao_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot limited"></span>Doubao</span></h4>
+                        <p>Responds only once in this case rather than continuing to follow the app.</p>
+                      </div>
+                    </div>
+                    <div class="capability-card">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/app-zhuanzhuan-gemini_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot limited"></span>Gemini</span></h4>
+                        <p>Shows strong initial recognition but still behaves as a one-shot responder.</p>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </article>
+          </div>
+
+          <div class="carousel-slide">
+            <article class="case-study" id="live-commentary">
+              <div class="case-header">
+                <div>
+                  <span class="sample-name">Capability 04</span>
+                  <h3>Live Commentary</h3>
+                </div>
+                <span class="case-tag">Live commentary</span>
+              </div>
+
+              <p>
+                Commentary is not just captioning. It requires the model to decide when a scene
+                deserves narration and when silence is better.
+              </p>
+
+              <div class="prompt-box">
+                <strong>Task:</strong> Narrate the visible scene in a lively, scene-grounded style.
+              </div>
+
+              <div class="capability-demo-stack">
+                <section class="sample-demo">
+                  <div class="sample-demo-header">
+                    <div>
+                      <span class="sample-name">Demo 01</span>
+                      <h4>Pet Livestream Commentary</h4>
+                    </div>
+                    <span class="case-tag">Live commentary</span>
+                  </div>
+                  <div class="capability-grid">
+                    <div class="capability-card featured">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/livestream-pet-joy_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot good"></span>JoyAI-VL-Interaction</span></h4>
+                        <p>Follows the scene and gives grounded commentary as the visible pets change.</p>
+                      </div>
+                    </div>
+                    <div class="capability-card">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/livestream-pet-doubao_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot limited"></span>Doubao</span></h4>
+                        <p>Describes only a few moments among many shots and often misses the actual visual content.</p>
+                      </div>
+                    </div>
+                    <div class="capability-card">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/livestream-pet-gemini_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot limited"></span>Gemini</span></h4>
+                        <p>Gives only one response in this case instead of continuing with the stream.</p>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <section class="sample-demo">
+                  <div class="sample-demo-header">
+                    <div>
+                      <span class="sample-name">Demo 02</span>
+                      <h4>Travel Scene Commentary</h4>
+                    </div>
+                    <span class="case-tag">Live commentary</span>
+                  </div>
+                  <div class="capability-grid">
+                    <div class="capability-card featured">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/commentary-travel-joy_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot good"></span>JoyAI-VL-Interaction</span></h4>
+                        <p>Maintains the requested commentary rhythm and keeps the narration grounded in the changing travel scene.</p>
+                      </div>
+                    </div>
+                    <div class="capability-card">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/commentary-travel-doubao_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot limited"></span>Doubao</span></h4>
+                        <p>Comments only near the beginning and does not follow the requested repeated timing.</p>
+                      </div>
+                    </div>
+                    <div class="capability-card">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/commentary-travel-gemini_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot limited"></span>Gemini</span></h4>
+                        <p>Produces a mismatched response style and does not sustain live commentary through the scene.</p>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </article>
+          </div>
+
+          <div class="carousel-slide">
+            <article class="case-study" id="fast-counting">
+              <div class="case-header">
+                <div>
+                  <span class="sample-name">Capability 05</span>
+                  <h3>Real-time Counting</h3>
+                </div>
+                <span class="case-tag">Real-time counting</span>
+              </div>
+
+              <p>
+                Counting over live video asks the model to maintain state across repeated events,
+                not just recognize a static object.
+              </p>
+
+              <div class="prompt-box">
+                <strong>Task:</strong> Count each dart throw as it happens in the video.
+              </div>
+
+              <div class="capability-demo-stack">
+                <section class="sample-demo">
+                  <div class="sample-demo-header">
+                    <div>
+                      <span class="sample-name">Demo 01</span>
+                      <h4>Dart Throw Counting</h4>
+                    </div>
+                    <span class="case-tag">Real-time counting</span>
+                  </div>
+                  <div class="capability-grid">
+                    <div class="capability-card featured">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/counting-darts-joy_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot good"></span>JoyAI-VL-Interaction</span></h4>
+                        <p>Catches the right timing for the repeated dart events.</p>
+                      </div>
+                    </div>
+                    <div class="capability-card">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/counting-darts-doubao_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot limited"></span>Doubao</span></h4>
+                        <p>Replies only twice, with higher delay and less reasonable responses.</p>
+                      </div>
+                    </div>
+                    <div class="capability-card">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/counting-darts-gemini_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot limited"></span>Gemini</span></h4>
+                        <p>Says "let me check" once and then stops responding in the recorded case.</p>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <section class="sample-demo">
+                  <div class="sample-demo-header">
+                    <div>
+                      <span class="sample-name">Demo 02</span>
+                      <h4>Burpee Counting</h4>
+                    </div>
+                    <span class="case-tag">Real-time counting</span>
+                  </div>
+                  <div class="capability-grid">
+                    <div class="capability-card featured">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/counting-burpee-joy_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot good"></span>JoyAI-VL-Interaction</span></h4>
+                        <p>Tracks repeated exercise actions and updates the count at the right moments.</p>
+                      </div>
+                    </div>
+                    <div class="capability-card">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/counting-burpee-doubao_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot limited"></span>Doubao</span></h4>
+                        <p>Responds only once and misses the continuous counting behavior.</p>
+                      </div>
+                    </div>
+                    <div class="capability-card">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/counting-burpee-gemini_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot limited"></span>Gemini</span></h4>
+                        <p>Does not perform reliable real-time counting in the recorded comparison.</p>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </article>
+          </div>
+
+          <div class="carousel-slide">
+            <article class="case-study" id="time-awareness">
+              <div class="case-header">
+                <div>
+                  <span class="sample-name">Capability 06</span>
+                  <h3>Time Awareness</h3>
+                </div>
+                <span class="case-tag">Time awareness</span>
+              </div>
+
+              <p>
+                Some tasks are defined by time itself: answer every few seconds, wait until a
+                timer is over, or report how long an activity has lasted.
+              </p>
+
+              <div class="prompt-box">
+                <strong>Task:</strong> Continue the interaction with an explicit sense of elapsed time during the cooking scene.
+              </div>
+
+              <div class="capability-demo-stack">
+                <section class="sample-demo">
+                  <div class="sample-demo-header">
+                    <div>
+                      <span class="sample-name">Demo 01</span>
+                      <h4>Timed Cooking Scene</h4>
+                    </div>
+                    <span class="case-tag">Time awareness</span>
+                  </div>
+                  <div class="capability-grid">
+                    <div class="capability-card featured">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/time-cooking-joy_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot good"></span>JoyAI-VL-Interaction</span></h4>
+                        <p>Perceives the 20-second timing target with about a 2-second error in this case, still ranking first overall.</p>
+                      </div>
+                    </div>
+                    <div class="capability-card">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/time-cooking-doubao_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot limited"></span>Doubao</span></h4>
+                        <p>Does not remind the user when the game ends in this recording.</p>
+                      </div>
+                    </div>
+                    <div class="capability-card">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/time-cooking-gemini_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot limited"></span>Gemini</span></h4>
+                        <p>Reminds at around 40 seconds, showing a larger timing error for this task.</p>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <section class="sample-demo">
+                  <div class="sample-demo-header">
+                    <div>
+                      <span class="sample-name">Demo 02</span>
+                      <h4>Stove Cleaning Timer</h4>
+                    </div>
+                    <span class="case-tag">Time awareness</span>
+                  </div>
+                  <div class="capability-grid">
+                    <div class="capability-card featured">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/time-stove-joy_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot good"></span>JoyAI-VL-Interaction</span></h4>
+                        <p>Counts on the requested interval and stops when instructed, keeping its own sense of elapsed time.</p>
+                      </div>
+                    </div>
+                    <div class="capability-card">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/time-stove-doubao_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot limited"></span>Doubao</span></h4>
+                        <p>Does not keep the requested repeated timing reliably.</p>
+                      </div>
+                    </div>
+                    <div class="capability-card">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/time-stove-gemini_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot limited"></span>Gemini</span></h4>
+                        <p>Stops after a short response and does not sustain the timed interaction.</p>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </article>
+          </div>
+
+          <div class="carousel-slide">
+            <article class="case-study" id="minute-scale-visual-recall">
+              <div class="case-header">
+                <div>
+                  <span class="sample-name">Capability 07</span>
+                  <h3>Long visual memory (5+ min)</h3>
+                </div>
+                <span class="case-tag">Long visual memory (5+ min)</span>
+              </div>
+
+              <p>
+                These cases focus on recalling visual details over a live session measured in
+                minutes, not on claiming broad persistent-memory superiority.
+              </p>
+
+              <div class="prompt-box">
+                <strong>Task:</strong> Remember an earlier visual detail and answer when the user asks about it later.
+              </div>
+
+              <div class="capability-demo-stack">
+                <section class="sample-demo">
+                  <div class="sample-demo-header">
+                    <div>
+                      <span class="sample-name">Demo 01</span>
+                      <h4>Meatball Count Recall</h4>
+                    </div>
+                    <span class="case-tag">Long visual memory (5+ min)</span>
+                  </div>
+                  <div class="capability-grid">
+                    <div class="capability-card featured">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/memory-meatball-joy_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot good"></span>JoyAI-VL-Interaction</span></h4>
+                        <p>Answers correctly from earlier visual context.</p>
+                      </div>
+                    </div>
+                    <div class="capability-card">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/memory-meatball-doubao_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot limited"></span>Doubao</span></h4>
+                        <p>Gives an incorrect meatball count in the recorded comparison.</p>
+                      </div>
+                    </div>
+                    <div class="capability-card">
+                      <div class="video-slot">
+                        <div class="video-placeholder">Gemini comparison video to be added.</div>
+                      </div>
+                      <div class="cap-body">
+                        <h4><span class="model-label"><span class="status-dot limited"></span>Gemini</span></h4>
+                        <p>Gemini timed out in this case, so no matching recording is available yet.</p>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </article>
+          </div>
+
+          <div class="carousel-slide">
+            <article class="case-study" id="visual-driven-interaction">
+              <div class="case-header">
+                <div>
+                  <span class="sample-name">Capability 08</span>
+                  <h3>Visual-driven Interaction</h3>
+                </div>
+                <span class="case-tag">Visual-driven interaction</span>
+              </div>
+
+              <p>
+                The model needs to react to what the human is doing in the visible scene and
+                keep the interaction grounded in those changing actions.
+              </p>
+
+              <div class="prompt-box">
+                <strong>Task:</strong> Chat naturally from the live visual context and react when the scene changes.
+              </div>
+
+              <div class="capability-demo-stack">
+                <section class="sample-demo">
+                  <div class="sample-demo-header">
+                    <div>
+                      <span class="sample-name">Demo 01</span>
+                      <h4>Scene-aware Casual Interaction</h4>
+                    </div>
+                    <span class="case-tag">Visual-driven interaction</span>
+                  </div>
+                  <div class="capability-grid single-model">
+                    <div class="capability-card featured single-demo">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/background-case1-gdp_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <span class="model-label"><span class="status-dot good"></span>JoyAI-VL-Interaction only</span>
+                        <p><strong>Caption to refine:</strong> Keeps the conversation grounded in what is currently visible and reacts as the live scene changes.</p>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </article>
+          </div>
+
+          <div class="carousel-slide">
+            <article class="case-study" id="agent-delegation">
+              <div class="case-header">
+                <div>
+                  <span class="sample-name">Capability 09</span>
+                  <h3>Agent Delegation in the Wild</h3>
+                </div>
+                <span class="case-tag">Agent delegation</span>
+              </div>
+
+              <p>
+                Some tasks should not be solved inline by the real-time model. JoyAI-VL-Interaction
+                learns to delegate a hard subtask to a background model or agent while continuing
+                to watch the live stream.
+              </p>
+
+              <div class="prompt-box">
+                <strong>Task:</strong> Keep interacting in real time while a harder visual or tool-use subtask is delegated to the background.
+              </div>
+
+              <div class="capability-demo-stack">
+                <section class="sample-demo">
+                  <div class="sample-demo-header">
+                    <div>
+                      <span class="sample-name">Demo 01</span>
+                      <h4>Phone App Delegation</h4>
+                    </div>
+                    <span class="case-tag">Agent delegation</span>
+                  </div>
+                  <div class="capability-grid single-model">
+                    <div class="capability-card featured single-demo">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/agent-delegation-phone-app_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <span class="model-label"><span class="status-dot good"></span>JoyAI-VL-Interaction only</span>
+                        <p><strong>Caption to refine:</strong> Keeps the live phone-screen interaction going while a background agent handles the harder app-related subtask.</p>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <section class="sample-demo">
+                  <div class="sample-demo-header">
+                    <div>
+                      <span class="sample-name">Demo 02</span>
+                      <h4>Mean Value Theorem Delegation</h4>
+                    </div>
+                    <span class="case-tag">Agent delegation</span>
+                  </div>
+                  <div class="capability-grid single-model">
+                    <div class="capability-card featured single-demo">
+                      <div class="video-slot">
+                        <video src="./assets/videos/cases/agent-delegation-mean-value-theorem_2k.mp4" controls preload="metadata" playsinline></video>
+                      </div>
+                      <div class="cap-body">
+                        <span class="model-label"><span class="status-dot good"></span>JoyAI-VL-Interaction only</span>
+                        <p><strong>Caption to refine:</strong> Delegates a math-heavy reasoning step to a background model, then brings the result back into the foreground interaction.</p>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </article>
+          </div>
         </div>
-        <div class="capacity-body">
-          <span class="capacity-kicker">Long-Horizon Presence</span>
-          <h3>Memory Over Continuous Shopping</h3>
-          <p>
-            The system keeps useful details from earlier in a live shopping stream and
-            brings them back when needed, enabled by the long-horizon memory module around
-            the interaction model.
-          </p>
-        </div>
-      </article>
+      </div>
     </div>
-  </section>
-
-  <!-- ================================================================
-       DEMOS
-       ================================================================ -->
-  <section class="section reveal" id="demos">
-    <h2>Demos</h2>
-
-    <p>
-      The following head-to-head demos compare JoyAI-VL-Interaction with Doubao and
-      Gemini in real-world visual interaction tasks, focusing on response quality,
-      timing, and whether the assistant stays grounded in the live stream.
-    </p>
-
-    <article class="case-study" id="app-shopping">
-      <div class="case-header">
-        <div>
-          <span class="case-index">Demo 01</span>
-          <h3>JD App Shopping Companion</h3>
-        </div>
-        <span class="case-tag">Autonomous interaction</span>
-      </div>
-
+    <div class="capability-subsection" id="more-things">
       <p>
-        While browsing the JD app, the user asks the model to help select shoes under
-        a budget constraint. A useful assistant should not stop at the frame where the
-        instruction is issued; it should keep observing the app screen, follow product
-        changes, and naturally continue the conversation.
+        <strong class="section-lead">More Things It Can Do</strong>
+        Beyond the capability demos above, there's a lot more you can do with
+        JoyAI-VL-Interaction, and the examples below show a few. Intuitively, it can also
+        call a live game as it's played, guide you through a recipe step by step while you
+        cook, or generate danmaku-style live comments over a stream on its own. These are
+        just a start, and we'd love for the community to explore many more ways to use it.
       </p>
 
-      <div class="prompt-box">
-        <strong>User instruction:</strong> “看看哪个鞋子适合我，预算400元以内”
-      </div>
-
-      <div class="capability-grid">
-        <div class="capability-card featured">
-          <div class="video-slot">
-            <video src="./assets/videos/autonomous-app-joyai.mp4" controls preload="metadata" playsinline></video>
+      <div class="more-carousel" data-carousel>
+        <div class="carousel-toolbar">
+          <div class="carousel-tabs" aria-label="More capability pages">
+            <button class="carousel-tab is-active" type="button">Page 01</button>
+            <button class="carousel-tab" type="button">Page 02</button>
+            <button class="carousel-tab" type="button">Page 03</button>
+            <button class="carousel-tab" type="button">Page 04</button>
+            <button class="carousel-tab" type="button">Page 05</button>
           </div>
-          <div class="cap-body">
-            <h4><span class="model-label"><span class="status-dot good"></span>JoyAI-VL-Interaction</span></h4>
-            <p>
-              Combines the live app screen with the user's shopping goal and proactively
-              carries out multi-turn interaction as new shoes appear.
-            </p>
+          <div class="carousel-nav" aria-label="More examples carousel controls">
+            <button type="button" data-carousel-prev aria-label="Previous example page">‹</button>
+            <button type="button" data-carousel-next aria-label="Next example page">›</button>
           </div>
         </div>
 
-        <div class="capability-card">
-          <div class="video-slot">
-            <video src="./assets/videos/autonomous-app-doubao.mp4" controls preload="metadata" playsinline></video>
-          </div>
-          <div class="cap-body">
-            <h4><span class="model-label"><span class="status-dot limited"></span>Doubao</span></h4>
-            <p>
-              Responds only after the user's explicit question and keeps describing the
-              shoes visible at the moment the instruction was issued.
-            </p>
-          </div>
-        </div>
+        <div class="carousel-viewport">
+          <div class="carousel-track">
+            <div class="carousel-slide is-active">
+              <div class="more-page">
+                <article class="more-card large">
+                  <div class="video-slot">
+                    <video src="./assets/videos/cases/more-cooking-guide-joy_2k.mp4" controls preload="metadata" playsinline></video>
+                  </div>
+                  <div class="more-body">
+                    <span>Cooking Guidance</span>
+                    <strong>Hands-free kitchen assistance</strong>
+                    <p>Watches the cooking process and gives guidance while the user's hands are busy.</p>
+                  </div>
+                </article>
 
-        <div class="capability-card">
-          <div class="video-slot">
-            <video src="./assets/videos/autonomous-app-gemini.mp4" controls preload="metadata" playsinline></video>
-          </div>
-          <div class="cap-body">
-            <h4><span class="model-label"><span class="status-dot limited"></span>Gemini</span></h4>
-            <p>
-              Responds only after the user's explicit question and remains focused on
-              the product state from the initial query moment.
-            </p>
-          </div>
-        </div>
-      </div>
-    </article>
+                <article class="more-card large">
+                  <div class="video-slot">
+                    <video src="./assets/videos/cases/more-virtual-companion-joy_2k.mp4" controls preload="metadata" playsinline></video>
+                  </div>
+                  <div class="more-body">
+                    <span>Companionship</span>
+                    <strong>Presence in a shared visual moment</strong>
+                    <p>Chats from the first-person visual context, making the interaction feel less like a detached Q&A session.</p>
+                  </div>
+                </article>
+              </div>
+            </div>
 
-    <article class="case-study" id="pet-livestream">
-      <div class="case-header">
-        <div>
-          <span class="case-index">Demo 02</span>
-          <h3>Pet Livestream Emotion Narration</h3>
-        </div>
-        <span class="case-tag">Autonomous interaction</span>
-      </div>
+            <div class="carousel-slide">
+              <div class="more-page">
+                <article class="more-card large">
+                  <div class="video-slot">
+                    <video src="./assets/videos/cases/more-outfit-guide-joy_2k.mp4" controls preload="metadata" playsinline></video>
+                  </div>
+                  <div class="more-body">
+                    <span>Outfit Guidance</span>
+                    <strong>Style advice from what the camera sees</strong>
+                    <p>Grounds suggestions in visible clothing, color, and occasion cues.</p>
+                  </div>
+                </article>
 
-      <p>
-        In a pet livestream, the model is asked to describe the pet's emotional state in
-        a personified style. The challenge is continuous responsiveness: the assistant
-        should react as different pets and behaviors appear, instead of answering once
-        and going silent.
-      </p>
+                <article class="more-card large">
+                  <div class="video-slot">
+                    <video src="./assets/videos/cases/more-find-orange-juice-joy_2k.mp4" controls preload="metadata" playsinline></video>
+                  </div>
+                  <div class="more-body">
+                    <span>Detail Recall</span>
+                    <strong>Remembering fleeting visual details</strong>
+                    <p>Answers later questions about objects that passed through the stream earlier.</p>
+                  </div>
+                </article>
+              </div>
+            </div>
 
-      <div class="prompt-box">
-        <strong>User instruction:</strong> “实时拟人化描述宠物的情绪状态”
-      </div>
+            <div class="carousel-slide">
+              <div class="more-page">
+                <article class="more-card large">
+                  <div class="video-slot">
+                    <video src="./assets/videos/cases/more-convenience-memory-joy_2k.mp4" controls preload="metadata" playsinline></video>
+                  </div>
+                  <div class="more-body">
+                    <span>Minute-scale Visual Recall</span>
+                    <strong>Recall across a browsing session</strong>
+                    <p>Maintains useful shopping-scene details as the stream continues.</p>
+                  </div>
+                </article>
 
-      <div class="capability-grid">
-        <div class="capability-card featured">
-          <div class="video-slot">
-            <video src="./assets/videos/autonomous-pet-joyai.mp4" controls preload="metadata" playsinline></video>
-          </div>
-          <div class="cap-body">
-            <h4><span class="model-label"><span class="status-dot good"></span>JoyAI-VL-Interaction</span></h4>
-            <p>
-              Generates personified emotional descriptions in real time according to the
-              pet's changing actions and visible emotional cues.
-            </p>
-          </div>
-        </div>
+                <article class="more-card large">
+                  <div class="video-slot">
+                    <video src="./assets/videos/cases/visual-poem-joy_2k.mp4" controls preload="metadata" playsinline></video>
+                  </div>
+                  <div class="more-body">
+                    <span>Visual Creation</span>
+                    <strong>Creative writing grounded in the scene</strong>
+                    <p>Writes from what it sees, not from a generic prompt template.</p>
+                  </div>
+                </article>
+              </div>
+            </div>
 
-        <div class="capability-card">
-          <div class="video-slot">
-            <video src="./assets/videos/autonomous-pet-doubao.mp4" controls preload="metadata" playsinline></video>
-          </div>
-          <div class="cap-body">
-            <h4><span class="model-label"><span class="status-dot limited"></span>Doubao</span></h4>
-            <p>
-              Describes only three pet emotions in the first 13 shots, then gives no
-              further responses for the remaining pets.
-            </p>
-          </div>
-        </div>
+            <div class="carousel-slide">
+              <div class="more-page">
+                <article class="more-card large">
+                  <div class="video-slot">
+                    <video src="./assets/videos/cases/more-racing-commentary-joy_2k.mp4" controls preload="metadata" playsinline></video>
+                  </div>
+                  <div class="more-body">
+                    <span>Racing Commentary</span>
+                    <strong>Live play-by-play from a moving scene</strong>
+                    <p>Narrates a racing event as the scene unfolds, grounding commentary in the changing visual action.</p>
+                  </div>
+                </article>
 
-        <div class="capability-card">
-          <div class="video-slot">
-            <video src="./assets/videos/autonomous-pet-gemini.mp4" controls preload="metadata" playsinline></video>
-          </div>
-          <div class="cap-body">
-            <h4><span class="model-label"><span class="status-dot limited"></span>Gemini</span></h4>
-            <p>
-              Describes only the pet emotion at the moment the instruction is issued,
-              then gives no further responses for the remaining pets.
-            </p>
-          </div>
-        </div>
-      </div>
-    </article>
+                <article class="more-card large">
+                  <div class="video-slot">
+                    <video src="./assets/videos/cases/more-proactive-response-joy_2k.mp4" controls preload="metadata" playsinline></video>
+                  </div>
+                  <div class="more-body">
+                    <span>Proactive Response</span>
+                    <strong>Speaking up when the moment calls for it</strong>
+                    <p>Responds from the live visual context without waiting for a new turn-based prompt.</p>
+                  </div>
+                </article>
+              </div>
+            </div>
 
-    <article class="case-study" id="fire-monitoring">
-      <div class="case-header">
-        <div>
-          <span class="case-index">Demo 03</span>
-          <h3>Fire Monitoring Alert</h3>
-        </div>
-        <span class="case-tag">Real-time response</span>
-      </div>
-
-      <p>
-        In a monitoring scenario, the user asks the model to alert immediately when a
-        fire starts. The key requirement is not only recognizing the event, but responding
-        at the moment it happens without hallucinating before the event appears.
-      </p>
-
-      <div class="prompt-box">
-        <strong>User instruction:</strong> “当火灾发生时立刻提醒我”
-      </div>
-
-      <div class="capability-grid">
-        <div class="capability-card featured">
-          <div class="video-slot">
-            <video src="./assets/videos/realtime-fire-joyai.mp4" controls preload="metadata" playsinline></video>
-          </div>
-          <div class="cap-body">
-            <h4><span class="model-label"><span class="status-dot good"></span>JoyAI-VL-Interaction</span></h4>
-            <p>
-              Sends an alert within one second after the fire occurs, matching the timing
-              required for practical monitoring and warning scenarios.
-            </p>
-          </div>
-        </div>
-
-        <div class="capability-card">
-          <div class="video-slot">
-            <video src="./assets/videos/realtime-fire-doubao.mp4" controls preload="metadata" playsinline></video>
-          </div>
-          <div class="cap-body">
-            <h4><span class="model-label"><span class="status-dot limited"></span>Doubao</span></h4>
-            <p>
-              Sends the alert roughly three seconds after the fire occurs, showing a
-              noticeable delay for time-sensitive warning tasks.
-            </p>
-          </div>
-        </div>
-
-        <div class="capability-card">
-          <div class="video-slot">
-            <video src="./assets/videos/realtime-fire-gemini.mp4" controls preload="metadata" playsinline></video>
-          </div>
-          <div class="cap-body">
-            <h4><span class="model-label"><span class="status-dot limited"></span>Gemini</span></h4>
-            <p>
-              Immediately claims that a fire appears after the instruction is issued,
-              but gives no response when the fire actually occurs.
-            </p>
+            <div class="carousel-slide">
+              <div class="more-page">
+                <article class="more-card large">
+                  <div class="video-slot">
+                    <video src="./assets/videos/cases/more-find-milk-joy_2k.mp4" controls preload="metadata" playsinline></video>
+                  </div>
+                  <div class="more-body">
+                    <span>Finding Things</span>
+                    <strong>Alerting when a target appears</strong>
+                    <p>Waits through the live stream and speaks up when the requested item comes into view.</p>
+                  </div>
+                </article>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </article>
-
-    <article class="case-study" id="supermarket-realtime">
-      <div class="case-header">
-        <div>
-          <span class="case-index">Demo 04</span>
-          <h3>Supermarket Product Detection</h3>
-        </div>
-        <span class="case-tag">Real-time response</span>
-      </div>
-
-      <p>
-        While browsing a JD convenience-store scene, the user asks to be reminded as
-        soon as a specific milk product appears. This case tests whether the model can
-        stay grounded in the live scene and react immediately to a target visual cue.
-      </p>
-
-      <div class="prompt-box">
-        <strong>User instruction:</strong> “看到悦鲜活鲜牛奶时立刻提醒我”
-      </div>
-
-      <div class="capability-grid">
-        <div class="capability-card featured">
-          <div class="video-slot">
-            <video src="./assets/videos/realtime-supermarket-joyai.mp4" controls preload="metadata" playsinline></video>
-          </div>
-          <div class="cap-body">
-            <h4><span class="model-label"><span class="status-dot good"></span>JoyAI-VL-Interaction</span></h4>
-            <p>
-              Sends the reminder the moment the Yuexianhuo fresh milk appears in the
-              visual stream.
-            </p>
-          </div>
-        </div>
-
-        <div class="capability-card">
-          <div class="video-slot">
-            <video src="./assets/videos/realtime-supermarket-doubao.mp4" controls preload="metadata" playsinline></video>
-          </div>
-          <div class="cap-body">
-            <h4><span class="model-label"><span class="status-dot limited"></span>Doubao</span></h4>
-            <p>
-              Sends the reminder about five to six seconds after the target product has
-              already appeared.
-            </p>
-          </div>
-        </div>
-
-        <div class="capability-card">
-          <div class="video-slot">
-            <video src="./assets/videos/realtime-supermarket-gemini.mp4" controls preload="metadata" playsinline></video>
-          </div>
-          <div class="cap-body">
-            <h4><span class="model-label"><span class="status-dot limited"></span>Gemini</span></h4>
-            <p>
-              Responds much later and describes only the scene from the query moment,
-              saying it saw dried fruit products rather than the target milk.
-            </p>
-          </div>
-        </div>
-      </div>
-    </article>
-
-    <article class="case-study" id="supermarket-memory">
-      <div class="case-header">
-        <div>
-          <span class="case-index">Demo 05</span>
-          <h3>Convenience-Store Price Recall</h3>
-        </div>
-        <span class="case-tag">Long-term memory</span>
-      </div>
-
-      <p>
-        While browsing a JD convenience-store scene, an item briefly appears early in the
-        video. The user asks about it much later, testing whether the model can recall a
-        fleeting visual detail rather than relying only on the current frame.
-      </p>
-
-      <div class="prompt-box">
-        <strong>User instruction:</strong> “回忆之前一闪而过的物品标价”
-      </div>
-
-      <div class="capability-grid">
-        <div class="capability-card featured">
-          <div class="video-slot">
-            <video src="./assets/videos/memory-supermarket-joyai.mp4" controls preload="metadata" playsinline></video>
-          </div>
-          <div class="cap-body">
-            <h4><span class="model-label"><span class="status-dot good"></span>JoyAI-VL-Interaction</span></h4>
-            <p>
-              Jinsangzi appears at 2s. When asked at 17s, the model accurately recalls
-              the price of Jinsangzi Houbao from earlier context.
-            </p>
-          </div>
-        </div>
-
-        <div class="capability-card">
-          <div class="video-slot">
-            <video src="./assets/videos/memory-supermarket-doubao.mp4" controls preload="metadata" playsinline></video>
-          </div>
-          <div class="cap-body">
-            <h4><span class="model-label"><span class="status-dot limited"></span>Doubao</span></h4>
-            <p>
-              Answers with the price of a different product, Renhe Runshuang Jinyinhua
-              at 16 yuan, instead of the briefly shown Jinsangzi Houbao.
-            </p>
-          </div>
-        </div>
-
-        <div class="capability-card">
-          <div class="video-slot">
-            <video src="./assets/videos/memory-supermarket-gemini.mp4" controls preload="metadata" playsinline></video>
-          </div>
-          <div class="cap-body">
-            <h4><span class="model-label"><span class="status-dot limited"></span>Gemini</span></h4>
-            <p>
-              Says it will help look for the item, appears to dispatch an external tool,
-              and after about one minute replies that it did not see Jinsangzi Houbao.
-            </p>
-          </div>
-        </div>
-      </div>
-    </article>
+    </div>
   </section>
 
   <!-- ================================================================
@@ -1577,86 +2856,206 @@
   <section class="section reveal" id="approach">
     <h2>Our Approach</h2>
 
-    <!-- ✏️ 替换为你的方法描述 -->
-    <div class="placeholder">
-      <div class="icon">🏗️</div>
-      在此填写方法概述，如：整体系统架构、模型设计思路、关键创新点。
+    <div class="diagram-slot">
+      <img src="./assets/images/joyvl-system-architecture.png" alt="JoyAI-VL-Interaction system architecture">
     </div>
 
-    <!-- Architecture Diagram -->
-    <h3>System Overview</h3>
-    <div class="diagram-slot">
-      <!-- ✏️ 替换为: <img src="./assets/images/architecture.png" alt="System architecture" /> -->
-      <div class="empty">✏️ 在此放置系统架构图</div>
-    </div>
-    <p class="diagram-caption">
-      [图注：系统整体架构图说明。]
+    <p>
+      At the core of JoyAI-VL-Interaction is one decision the model makes on its own, every
+      second: speak, stay silent, or delegate. We build it on our visual-language instruct
+      model, JoyAI-VL-8B, and keep speech as pluggable input and output rather than fusing
+      it into the model, so the model's only job is to watch and judge the right moment to
+      act. To stay real-time over long streams, a predictive video codec (AdaCodec) spends
+      only a handful of tokens on each predictable frame and saves full detail for the
+      moments the scene actually changes, so the token budget grows slowly instead of with
+      every frame. The behavior is learned rather than scripted: we train the model on more
+      than four million time-aligned clips labeled second by second for when to speak, stay
+      silent, or delegate, and refine it with reinforcement learning. We release the data
+      and the full recipe so the result can be reproduced and extended.
     </p>
 
-    <div class="placeholder" style="margin-top: 28px;">
-      <div class="icon">⚙️</div>
-      更多技术细节（模型结构、训练策略、推理优化等）在此补充。<br/>
-      可以按 TML 的风格分多个 h3 小节来写。
+    <p>
+      Around this model we build a complete, deployable system so it works out of the box.
+      The model is the only part that decides when to act; everything else is a pluggable
+      component arranged around it: streaming ASR and TTS for speech, a long-horizon memory
+      that keeps useful detail across hours, a visualization UI, and a bridge that lets the
+      model hand hard subtasks to any background model, API, or agent and fold the answer
+      back while it keeps watching. The whole stack runs on standard vLLM infrastructure to
+      stay real-time over long sessions, and any component can be swapped for a deployment's
+      own without rebuilding the rest.
+    </p>
+
+    <p>
+      We are open-sourcing all of it, the 8B model, its training recipe, the data, and the
+      deployable system, so anyone can stand up a real-time, always-present assistant and
+      carry the interaction-model direction forward in the open. We expect the full release
+      to be complete by June 24, 2026, at
+      <a href="https://github.com/jd-opensource/JoyAI-VL-Interaction">https://github.com/jd-opensource/JoyAI-VL-Interaction</a>.
+    </p>
+
+    <div class="method-grid">
+      <div class="method-card">
+        <span>Model</span>
+        <strong>JoyAI-VL-Interaction</strong>
+        <p>The first open vision-language interaction model.</p>
+      </div>
+      <div class="method-card">
+        <span>Data</span>
+        <strong>4M time-aligned interaction samples</strong>
+        <p>Still far from saturated, with clear gains from scaling further.</p>
+      </div>
+      <div class="method-card">
+        <span>System</span>
+        <strong>VL-Interaction System</strong>
+        <p>A deployable system that works out of the box.</p>
+      </div>
     </div>
   </section>
 
   <!-- ================================================================
-       BENCHMARKS
+       EVALUATION
        ================================================================ -->
-  <section class="section reveal" id="benchmarks">
-    <h2>Benchmarks</h2>
+  <section class="section reveal" id="evaluation">
+    <h2>Evaluation</h2>
 
     <p>
-      <!-- ✏️ 一段总体说明 -->
-      [概述你们在哪些 benchmark 上进行了评估。]
+      We evaluate the model in 58 real, event-driven visual interaction settings. Each item
+      is recorded as a live video interaction with JoyAI-VL-Interaction and the
+      corresponding in-app video-call assistant, then judged pairwise by human raters for
+      both response quality and timing. This keeps the evaluation close to the product
+      setting we care about: whether the assistant says the right thing at the right moment
+      while the scene is actually moving.
     </p>
 
-    <!-- Chart placeholder -->
-    <div class="diagram-slot">
-      <!-- ✏️ 替换为对比图: <img src="./assets/images/benchmark-chart.png" alt="Benchmark comparison" /> -->
-      <div class="empty">✏️ 在此放置 Benchmark 对比图（散点图 / 雷达图等）</div>
-    </div>
+    <p>
+      Each aspect corresponds to a scenario category in the evaluation ledger. The memory
+      category here is a minute-scale visual recall setting, with cases mostly spanning
+      several minutes to a little over ten minutes. The tables report the percentage of
+      pairwise comparisons where human raters preferred JoyAI-VL-Interaction, found a tie,
+      or preferred the baseline.
+    </p>
 
-    <!-- Benchmark table -->
+    <p class="benchmark-callout">
+      In the final aggregate, JoyAI-VL-Interaction wins
+      <span class="benchmark-score">77.6%</span> of pairwise comparisons against Doubao
+      and <span class="benchmark-score">87.9%</span> against Gemini, with ties included
+      separately in the tables below. Its strongest margins fall on the most time-critical
+      settings: it wins every comparison in monitoring and alerting against both systems
+      and never loses one in real-time translation or counting, exactly the event-driven,
+      act-at-the-right-moment tasks that turn-based products structurally miss.
+    </p>
+
+    <div class="benchmark-title">JoyAI-VL-Interaction vs Doubao</div>
     <div class="table-wrapper">
       <table>
         <thead>
           <tr>
-            <th>Benchmark</th>
+            <th>Aspect</th>
             <th>JoyAI-VL-Interaction</th>
-            <th>Baseline A</th>
-            <th>Baseline B</th>
-            <th>Baseline C</th>
+            <th>Tie</th>
+            <th>Doubao</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>[Benchmark 1]</td>
-            <td class="best">--</td>
-            <td>--</td>
-            <td>--</td>
-            <td>--</td>
+            <td>Monitoring and alerting</td>
+            <td class="best">100.0%</td>
+            <td>0.0%</td>
+            <td>0.0%</td>
           </tr>
           <tr>
-            <td>[Benchmark 2]</td>
-            <td class="best">--</td>
-            <td>--</td>
-            <td>--</td>
-            <td>--</td>
+            <td>Real-time counting</td>
+            <td class="best">70.0%</td>
+            <td>30.0%</td>
+            <td>0.0%</td>
           </tr>
           <tr>
-            <td>[Benchmark 3]</td>
-            <td>--</td>
-            <td>--</td>
-            <td class="best">--</td>
-            <td>--</td>
+            <td>Real-time translation</td>
+            <td class="best">80.0%</td>
+            <td>20.0%</td>
+            <td>0.0%</td>
           </tr>
           <tr>
-            <td>[Benchmark 4]</td>
-            <td class="best">--</td>
-            <td>--</td>
-            <td>--</td>
-            <td>--</td>
+            <td>Time awareness</td>
+            <td class="best">80.0%</td>
+            <td>10.0%</td>
+            <td>10.0%</td>
+          </tr>
+          <tr>
+            <td>Live commentary and guidance</td>
+            <td class="best">55.6%</td>
+            <td>22.2%</td>
+            <td>22.2%</td>
+          </tr>
+          <tr>
+            <td>Long visual memory</td>
+            <td class="best">77.8%</td>
+            <td>22.2%</td>
+            <td>0.0%</td>
+          </tr>
+          <tr>
+            <td><strong>Overall</strong></td>
+            <td class="best"><strong>77.6%</strong></td>
+            <td><strong>17.2%</strong></td>
+            <td><strong>5.2%</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="benchmark-title">JoyAI-VL-Interaction vs Gemini</div>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Aspect</th>
+            <th>JoyAI-VL-Interaction</th>
+            <th>Tie</th>
+            <th>Gemini</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Monitoring and alerting</td>
+            <td class="best">100.0%</td>
+            <td>0.0%</td>
+            <td>0.0%</td>
+          </tr>
+          <tr>
+            <td>Real-time counting</td>
+            <td class="best">100.0%</td>
+            <td>0.0%</td>
+            <td>0.0%</td>
+          </tr>
+          <tr>
+            <td>Real-time translation</td>
+            <td class="best">100.0%</td>
+            <td>0.0%</td>
+            <td>0.0%</td>
+          </tr>
+          <tr>
+            <td>Time awareness</td>
+            <td class="best">50.0%</td>
+            <td>40.0%</td>
+            <td>10.0%</td>
+          </tr>
+          <tr>
+            <td>Live commentary and guidance</td>
+            <td class="best">100.0%</td>
+            <td>0.0%</td>
+            <td>0.0%</td>
+          </tr>
+          <tr>
+            <td>Long visual memory</td>
+            <td class="best">77.8%</td>
+            <td>22.2%</td>
+            <td>0.0%</td>
+          </tr>
+          <tr>
+            <td><strong>Overall</strong></td>
+            <td class="best"><strong>87.9%</strong></td>
+            <td><strong>10.3%</strong></td>
+            <td><strong>1.7%</strong></td>
           </tr>
         </tbody>
       </table>
@@ -1665,14 +3064,39 @@
   </section>
 
   <!-- ================================================================
-       LIMITATIONS
+       CONCLUSION
        ================================================================ -->
   <section class="section reveal" id="limitations">
-    <h2>Limitations and Future Work</h2>
-    <div class="placeholder">
-      <div class="icon">🔮</div>
-      在此填写当前方法的局限性和未来方向。
-    </div>
+    <h2>Conclusion</h2>
+    <p>
+      <strong class="section-lead">Limitations</strong>
+      We want to be upfront about scale. The video-call assistants we compare against,
+      Doubao and Gemini, are backed by far larger models and polished through years of
+      product iteration against real users; they are comprehensive, broadly knowledgeable,
+      and hard to beat on open-ended chat, personal style, and the long tail of everyday
+      requests. JoyAI-VL-Interaction is a compact 8B model, and we don't claim to match them
+      everywhere. What we have done is pry open a door: in the advantage zone of a
+      vision-language interaction model, real-time presence, vision-triggered proactivity,
+      and a sense of time across a stream, a far smaller open model already comes out ahead.
+      That a compact, open model can do this against large, heavily optimized products is
+      exactly why we're excited to put this work in front of the community.
+    </p>
+    <p>
+      <strong class="section-lead">What's next, and an invitation</strong>
+      And we think this is only the beginning. The interaction data we trained on is still
+      small, yet even this much was enough for capabilities we never explicitly taught, like
+      guiding a shopper through changing app screens, to emerge on their own; we're
+      convinced the headroom is large, and that scaling this kind of time-aligned data,
+      together with the recipe and the system, will take the model much further. The moment
+      we are reaching for is an everyday one: you come home worn out after a long day, and
+      before you have said a word, a quiet voice notices and offers, "I can see you're tired;
+      today must have been hard on you." Presence like that, given unasked, is what an
+      interaction model makes possible and a turn-based one, waiting to be addressed, never
+      can. We have released the whole stack openly, the 8B model, the time-aligned data, the
+      training recipe, and the deployable system, to lower the barrier for everyone working
+      in this direction. We'd love for you to explore, with us, what a model that is truly
+      present in the world can become.
+    </p>
   </section>
 
   <!-- ================================================================
@@ -1682,21 +3106,30 @@
     <h2>Authors</h2>
     <div class="authors-block">
       <div class="author-list">
-        <!-- ✏️ 替换为实际作者列表 -->
-        <span class="lead">Author A</span><sup>1,*</sup> &nbsp;
-        <span class="lead">Author B</span><sup>1,*</sup> &nbsp;
-        Author C<sup>2</sup> &nbsp;
-        Author D<sup>1</sup> &nbsp;
-        Author E<sup>3</sup> &nbsp;
-        Author F<sup>1</sup> &nbsp;
-        Author G<sup>2</sup> &nbsp;
-        Author H<sup>1,+</sup>
+        <div class="author-row">
+          <span class="lead">Dingyu Yao</span><sup>*</sup> &nbsp;
+          <span class="lead">Junhao Zhou</span><sup>*</sup> &nbsp;
+          <span class="lead">Chenxu Yang</span><sup>*</sup> &nbsp;
+          <span class="lead">Chuanyu Qin</span><sup>*</sup> &nbsp;
+          <span class="lead">Haowen Hou</span><sup>*</sup>
+        </div>
+        <div class="author-row">
+          Zheming Liang &nbsp;
+          Congcong Wang &nbsp;
+          Yuhang Cao &nbsp;
+          Shenglong Ye &nbsp;
+          Shuhuan Gu
+        </div>
+        <div class="author-row">
+          Haoyang Huang &nbsp;
+          <span class="lead">Qingyi Si</span><sup>*,†</sup> &nbsp;
+          <span class="lead">Nan Duan</span><sup>✉</sup> &nbsp;
+          <span class="lead">Jiaqi Wang</span><sup>✉</sup>
+        </div>
       </div>
       <div class="affiliations">
-        <sup>1</sup>Joy Future Academy, JD &nbsp;&nbsp;
-        <sup>2</sup>University A &nbsp;&nbsp;
-        <sup>3</sup>University B<br/>
-        <span style="margin-top:4px; display:inline-block;">* Equal contribution &nbsp; + Project lead</span>
+        <span class="institution">Joy Future Academy, JD</span><br/>
+        <span class="contribution-note"><sup>*</sup> Equal contribution &nbsp; <sup>†</sup> Project lead &nbsp; <sup>✉</sup> Corresponding Authors</span>
       </div>
     </div>
   </section>
@@ -1709,7 +3142,7 @@
     <div class="bibtex-block">
       <button class="copy-btn" onclick="copyBibtex()">Copy</button>
       <pre><code>@techreport{joyai2026vlinteraction,
-  title        = {JoyAI-VL-Interaction: [Full Title]},
+  title        = {JoyAI-VL-Interaction: Real-Time Vision-Language Interaction Intelligence},
   author       = {{Video Understanding Team @ Joy Future Academy, JD}},
   institution  = {Joy Future Academy, JD},
   year         = {2026},
@@ -1780,6 +3213,106 @@
     if (!video) return;
     card.addEventListener('mouseenter', () => video.play());
     card.addEventListener('mouseleave', () => { video.pause(); video.currentTime = 0; });
+  });
+
+  /* ── Per-capability demo strips ── */
+  document.querySelectorAll('.case-study').forEach(study => {
+    const prompt = study.querySelector(':scope > .prompt-box');
+    const instruction = prompt
+      ? prompt.textContent.trim().replace(/^Task:\s*/i, '').trim()
+      : '';
+    const stack = study.querySelector(':scope .capability-demo-stack');
+    if (!stack) return;
+
+    const demos = Array.from(stack.querySelectorAll(':scope > .sample-demo'));
+
+    demos.forEach(demo => {
+      if (!instruction || demo.querySelector('.sample-instruction')) return;
+      const instructionEl = document.createElement('p');
+      instructionEl.className = 'sample-instruction';
+      instructionEl.textContent = instruction;
+      demo.querySelector('.sample-demo-header')?.after(instructionEl);
+    });
+
+    if (demos.length < 2 || stack.previousElementSibling?.classList.contains('sample-demo-tabs')) {
+      return;
+    }
+
+    const tabs = document.createElement('div');
+    tabs.className = 'sample-demo-tabs';
+    tabs.setAttribute('aria-label', 'Demo selector');
+
+    const buttons = demos.map((demo, i) => {
+      const label = demo.querySelector('.sample-demo-header h4')?.textContent.trim()
+        || `Demo ${String(i + 1).padStart(2, '0')}`;
+      const button = document.createElement('button');
+      button.className = `sample-demo-tab${i === 0 ? ' is-active' : ''}`;
+      button.type = 'button';
+      button.textContent = label;
+      button.addEventListener('click', () => {
+        stack.scrollTo({ left: demo.offsetLeft - stack.offsetLeft, behavior: 'smooth' });
+        buttons.forEach((b, j) => b.classList.toggle('is-active', j === i));
+      });
+      tabs.appendChild(button);
+      return button;
+    });
+
+    stack.before(tabs);
+
+    stack.addEventListener('scroll', () => {
+      const activeIndex = demos.reduce((best, demo, i) => {
+        const distance = Math.abs((demo.offsetLeft - stack.offsetLeft) - stack.scrollLeft);
+        return distance < best.distance ? { index: i, distance } : best;
+      }, { index: 0, distance: Infinity }).index;
+      buttons.forEach((button, i) => button.classList.toggle('is-active', i === activeIndex));
+    }, { passive: true });
+  });
+
+  /* ── Horizontal demo carousels ── */
+  document.querySelectorAll('[data-carousel]').forEach(carousel => {
+    const track = carousel.querySelector('.carousel-track');
+    const slides = Array.from(carousel.querySelectorAll('.carousel-slide'));
+    const tabs = Array.from(carousel.querySelectorAll('.carousel-tab'));
+    const section = carousel.closest('.section');
+    const targets = carousel.classList.contains('demo-carousel') && section
+      ? Array.from(section.querySelectorAll('[data-carousel-target]'))
+      : [];
+    const prev = carousel.querySelector('[data-carousel-prev]');
+    const next = carousel.querySelector('[data-carousel-next]');
+    if (!track || !slides.length) return;
+
+    let index = 0;
+
+    function pauseVideos(slide) {
+      slide.querySelectorAll('video').forEach(video => {
+        video.pause();
+        video.currentTime = 0;
+      });
+    }
+
+    function goTo(nextIndex) {
+      const bounded = (nextIndex + slides.length) % slides.length;
+      if (bounded === index) return;
+      pauseVideos(slides[index]);
+      index = bounded;
+      track.style.transform = `translateX(-${index * 100}%)`;
+      slides.forEach((slide, i) => slide.classList.toggle('is-active', i === index));
+      tabs.forEach((tab, i) => tab.classList.toggle('is-active', i === index));
+      targets.forEach(target => {
+        target.classList.toggle('is-active', Number(target.dataset.carouselTarget) === index);
+      });
+      tabs[index]?.scrollIntoView({ behavior: 'smooth', inline: 'nearest', block: 'nearest' });
+    }
+
+    tabs.forEach((tab, i) => tab.addEventListener('click', () => goTo(i)));
+    targets.forEach(target => {
+      target.addEventListener('click', () => {
+        goTo(Number(target.dataset.carouselTarget) || 0);
+        carousel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+    prev?.addEventListener('click', () => goTo(index - 1));
+    next?.addEventListener('click', () => goTo(index + 1));
   });
 
   /* ── Copy BibTeX ── */
