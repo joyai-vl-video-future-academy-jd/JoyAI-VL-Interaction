@@ -319,7 +319,7 @@
     }
 
     /* ================================================================
-       HERO IMAGE
+       HERO MEDIA
        ================================================================ */
     .hero-cover {
       max-width: var(--page-width);
@@ -328,10 +328,64 @@
       animation: fadeUp 0.7s ease 0.3s both;
     }
 
-    .hero-cover img {
-      width: 100%;
+    .hero-media-card {
+      overflow: hidden;
+      border: 1px solid var(--border);
       border-radius: var(--radius-lg);
+      background: var(--bg-card);
+      box-shadow: 0 18px 52px rgba(64, 52, 46, 0.08);
+    }
+
+    .hero-media-tabs {
+      display: flex;
+      gap: 8px;
+      padding: 14px;
+      border-bottom: 1px solid var(--border);
+      background: color-mix(in srgb, var(--bg-card) 88%, var(--accent-dim));
+      overflow-x: auto;
+    }
+
+    .hero-media-tab {
+      appearance: none;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      font-weight: 800;
+      padding: 8px 15px;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+    }
+
+    .hero-media-tab:hover,
+    .hero-media-tab.is-active {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .hero-media-panel {
+      display: none;
+      margin: 0;
+      background: var(--bg-video);
+    }
+
+    .hero-media-panel.is-active {
       display: block;
+    }
+
+    .hero-cover img,
+    .hero-cover video {
+      width: 100%;
+      display: block;
+    }
+
+    .hero-cover video {
+      aspect-ratio: 2560 / 1282;
+      background: var(--bg-video);
+      object-fit: contain;
     }
 
     /* ================================================================
@@ -1866,6 +1920,11 @@
       .nav-links { display: none; }
       .hero { padding: 110px 20px 32px; }
       .hero-cover { padding: 0 20px; }
+      .hero-media-tabs { padding: 12px; }
+      .hero-media-tab {
+        flex: 0 0 auto;
+        font-size: 0.78rem;
+      }
       .content { padding: 0 20px; }
       .core-grid,
       .method-grid,
@@ -1970,12 +2029,21 @@
 </header>
 
 <!-- ================================================================
-     HERO COVER IMAGE
+     HERO COVER MEDIA
      ================================================================ -->
 <div class="hero-cover">
-  <figure class="hero-figure">
-    <img src="./assets/images/overview.png" alt="JoyAI-VL-Interaction overview">
-  </figure>
+  <div class="hero-media-card" data-hero-media>
+    <div class="hero-media-tabs" aria-label="Hero media selector">
+      <button class="hero-media-tab is-active" type="button" data-hero-panel="intro-video">Intro video</button>
+      <button class="hero-media-tab" type="button" data-hero-panel="overview-figure">Overview figure</button>
+    </div>
+    <div class="hero-media-panel is-active" data-hero-panel-id="intro-video">
+      <video src="./assets/videos/intro-joyai-vl-interaction_2k.mp4" poster="./assets/images/intro-video-poster.jpg" controls preload="metadata" playsinline></video>
+    </div>
+    <figure class="hero-media-panel" data-hero-panel-id="overview-figure">
+      <img src="./assets/images/overview.png" alt="JoyAI-VL-Interaction overview">
+    </figure>
+  </div>
 </div>
 
 <!-- ================================================================
@@ -3439,6 +3507,27 @@
   }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
 
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  /* ── Hero media selector ── */
+  document.querySelectorAll('[data-hero-media]').forEach(media => {
+    const tabs = Array.from(media.querySelectorAll('[data-hero-panel]'));
+    const panels = Array.from(media.querySelectorAll('[data-hero-panel-id]'));
+    if (!tabs.length || !panels.length) return;
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const target = tab.dataset.heroPanel;
+        tabs.forEach(item => item.classList.toggle('is-active', item === tab));
+        panels.forEach(panel => {
+          const isActive = panel.dataset.heroPanelId === target;
+          panel.classList.toggle('is-active', isActive);
+          if (!isActive) {
+            panel.querySelectorAll('video').forEach(video => video.pause());
+          }
+        });
+      });
+    });
+  });
 
   /* ── Video hover auto-play ── */
   document.querySelectorAll('.capability-card').forEach(card => {
