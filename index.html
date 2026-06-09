@@ -1355,6 +1355,41 @@
       margin-bottom: 12px;
     }
 
+    .demo-carousel .carousel-toolbar.capability-context-toolbar {
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .capability-context {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      color: var(--text-secondary);
+    }
+
+    .capability-context-kicker {
+      color: var(--accent-light);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .capability-context strong {
+      color: var(--text-primary);
+      font-size: 0.98rem;
+      font-weight: 800;
+    }
+
+    .capability-context-note {
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+
     .carousel-toolbar {
       display: flex;
       align-items: flex-start;
@@ -1405,8 +1440,16 @@
 
     .carousel-nav {
       display: flex;
+      align-items: center;
       gap: 8px;
       flex: 0 0 auto;
+    }
+
+    .carousel-nav-label {
+      margin-right: 2px;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      font-weight: 700;
     }
 
     .carousel-nav button {
@@ -2093,10 +2136,16 @@
     </div>
 
     <div class="demo-carousel" data-carousel>
-      <div class="carousel-toolbar">
+      <div class="carousel-toolbar capability-context-toolbar">
+        <div class="capability-context" aria-live="polite">
+          <span class="capability-context-kicker">Capability demos</span>
+          <strong data-capability-context-title>Demos of Capability 01 · Real-time Translation</strong>
+          <span class="capability-context-note">Arrows switch capabilities; sample tabs switch demos.</span>
+        </div>
         <div class="carousel-nav" aria-label="Capability carousel controls">
-          <button type="button" data-carousel-prev aria-label="Previous capability demo">‹</button>
-          <button type="button" data-carousel-next aria-label="Next capability demo">›</button>
+          <span class="carousel-nav-label">Capability</span>
+          <button type="button" data-carousel-prev aria-label="Previous capability" title="Previous capability">‹</button>
+          <button type="button" data-carousel-next aria-label="Next capability" title="Next capability">›</button>
         </div>
       </div>
 
@@ -3463,6 +3512,7 @@
       : [];
     const prev = carousel.querySelector('[data-carousel-prev]');
     const next = carousel.querySelector('[data-carousel-next]');
+    const contextTitle = carousel.querySelector('[data-capability-context-title]');
     if (!track || !slides.length) return;
 
     let index = 0;
@@ -3472,6 +3522,16 @@
         video.pause();
         video.currentTime = 0;
       });
+    }
+
+    function updateContext() {
+      if (!contextTitle) return;
+      const activeSlide = slides[index];
+      const capability = activeSlide.querySelector('.case-header .sample-name')?.textContent.trim();
+      const title = activeSlide.querySelector('.case-header h3')?.textContent.trim();
+      if (capability && title) {
+        contextTitle.textContent = `Demos of ${capability} · ${title}`;
+      }
     }
 
     function goTo(nextIndex) {
@@ -3485,6 +3545,7 @@
       targets.forEach(target => {
         target.classList.toggle('is-active', Number(target.dataset.carouselTarget) === index);
       });
+      updateContext();
       const activeTab = tabs[index];
       if (activeTab?.parentElement) {
         activeTab.parentElement.scrollTo({
@@ -3502,6 +3563,7 @@
     });
     prev?.addEventListener('click', () => goTo(index - 1));
     next?.addEventListener('click', () => goTo(index + 1));
+    updateContext();
   });
 
   /* ── Copy BibTeX ── */
