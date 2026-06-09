@@ -1,0 +1,8 @@
+name = "joyai-vl-interaction-pageviews"
+main = "workers/page-views.js"
+compatibility_date = "2026-06-09"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "joyai-vl-interaction-pageviews"
+database_id = "REPLACE_WITH_D1_DATABASE_ID"
