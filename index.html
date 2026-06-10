@@ -1849,27 +1849,6 @@
       font-weight: 600;
     }
 
-    .mapmyvisitors-counter {
-      display: inline-block;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-      opacity: 0;
-      pointer-events: none;
-      position: absolute;
-    }
-
-    .mapmyvisitors-counter #mapmyvisitors-widget,
-    .mapmyvisitors-counter .mapmyvisitors-map-container,
-    .mapmyvisitors-counter .mapmyvisitors-map {
-      width: 1px !important;
-      height: 1px !important;
-      min-height: 1px !important;
-      margin: 0 !important;
-      padding: 0 !important;
-      overflow: hidden !important;
-    }
-
     footer a { color: var(--text-secondary); }
     footer a:hover { color: var(--accent-light); }
 
@@ -3499,10 +3478,7 @@
 <footer>
   <div class="footer-meta">
     <span>© 2026 Video Understanding Team of JoyAI-VL, Joy Future Academy, JD</span>
-    <span class="page-views" id="pageViews" data-fallback-endpoint="https://joyai-vl-interaction-pageviews.chonick21.workers.dev/pageview">Page views <strong>--</strong></span>
-    <span class="mapmyvisitors-counter" aria-hidden="true">
-      <script type="text/javascript" id="mapmyvisitors" src="//mapmyvisitors.com/map.js?d=y46DmVtH9rV6KxLo8U6j1XmGtmKhdMaQjpDf5WQwO6o&cl=ffffff&w=180&t=tt"></script>
-    </span>
+    <span class="page-views" id="pageViews" data-endpoint="https://joyai-vl-interaction-pageviews.chonick21.workers.dev/pageview">Page views <strong>--</strong></span>
   </div>
   <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'}); return false;">Back to top ↑</a>
 </footer>
@@ -3695,59 +3671,25 @@
     if (!viewEl) return;
 
     const valueEl = viewEl.querySelector('strong');
-    if (!valueEl) return;
+    const endpoint = viewEl.dataset.endpoint?.trim();
+    if (!endpoint || !valueEl) return;
 
-    const setViews = (views) => {
-      if (Number.isFinite(views) && views >= 0) {
-        valueEl.textContent = views.toLocaleString('en-US');
-        return true;
-      }
-      return false;
-    };
+    const page = `${location.origin}${location.pathname}`;
+    const params = new URLSearchParams({ page });
 
-    const extractViews = (text) => {
-      const match = text?.replace(/\s+/g, ' ').match(/[\d,]+/);
-      return match ? Number(match[0].replace(/,/g, '')) : NaN;
-    };
-
-    const syncMapMyVisitors = () => {
-      const mapCounter = document.querySelector('#mapmyvisitors-widget .mapmyvisitors-visitors');
-      const views = extractViews(mapCounter?.textContent);
-      return setViews(views);
-    };
-
-    const observer = new MutationObserver(() => {
-      if (syncMapMyVisitors()) observer.disconnect();
-    });
-    observer.observe(document.body, { childList: true, subtree: true, characterData: true });
-
-    let attempts = 0;
-    const timer = window.setInterval(() => {
-      attempts += 1;
-      if (syncMapMyVisitors() || attempts > 30) {
-        window.clearInterval(timer);
-        observer.disconnect();
-      }
-    }, 500);
-
-    const endpoint = viewEl.dataset.fallbackEndpoint?.trim();
-    if (endpoint) {
-      const page = `${location.origin}${location.pathname}`;
-      const params = new URLSearchParams({ page });
-
-      window.setTimeout(() => {
-        if (valueEl.textContent !== '--') return;
-        fetch(`${endpoint}?${params.toString()}`, {
-          method: 'GET',
-          headers: { 'Accept': 'application/json' }
-        })
-          .then(response => response.ok ? response.json() : null)
-          .then(data => {
-            setViews(Number(data?.views));
-          })
-          .catch(() => {});
-      }, 2500);
-    }
+    fetch(`${endpoint}?${params.toString()}`, {
+      method: 'POST',
+      keepalive: true,
+      headers: { 'Accept': 'application/json' }
+    })
+      .then(response => response.ok ? response.json() : null)
+      .then(data => {
+        const views = Number(data?.views);
+        if (Number.isFinite(views) && views >= 0) {
+          valueEl.textContent = views.toLocaleString('en-US');
+        }
+      })
+      .catch(() => {});
   })();
 
   /* ── Sidebar TOC: auto show/hide + scroll-spy ── */
