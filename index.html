@@ -19,6 +19,11 @@
       try {
         const savedTheme = localStorage.getItem('joyai-theme');
         if (savedTheme === 'dark') document.documentElement.dataset.theme = 'dark';
+        const savedLang = localStorage.getItem('joyai-lang');
+        if (savedLang === 'zh') {
+          document.documentElement.dataset.contentLang = 'zh';
+          document.documentElement.lang = 'zh-CN';
+        }
       } catch (_) {}
     })();
   </script>
@@ -187,6 +192,7 @@
 
     .nav-links a:hover { color: var(--text-primary); }
 
+    .lang-toggle,
     .theme-toggle {
       width: 36px;
       height: 36px;
@@ -201,6 +207,17 @@
       transition: border-color 0.2s, color 0.2s, background 0.2s, transform 0.2s;
     }
 
+    .lang-toggle {
+      width: auto;
+      min-width: 44px;
+      padding: 0 12px;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+
+    .lang-toggle:hover,
     .theme-toggle:hover {
       color: var(--accent-light);
       border-color: var(--border-hover);
@@ -1979,6 +1996,7 @@
         <li><a href="#authors">Authors</a></li>
         <li><a href="#citation">BibTeX</a></li>
       </ul>
+      <button class="lang-toggle" type="button" data-lang-toggle aria-label="Switch to Chinese" title="Switch to Chinese">ZH</button>
       <button class="theme-toggle" type="button" aria-label="Toggle color theme" title="Toggle color theme">
         <svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true">
           <circle cx="12" cy="12" r="4"></circle>
@@ -3478,7 +3496,7 @@
 <footer>
   <div class="footer-meta">
     <span>© 2026 Video Understanding Team of JoyAI-VL, Joy Future Academy, JD</span>
-    <span class="page-views" id="pageViews" data-endpoint="https://joyai-vl-interaction-pageviews.chonick21.workers.dev/pageview">Page views <strong>--</strong></span>
+    <span class="page-views" id="pageViews" data-endpoint="https://joyai-vl-interaction-pageviews.chonick21.workers.dev/pageview"><span class="page-views-label">Page views</span> <strong>--</strong></span>
   </div>
   <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'}); return false;">Back to top ↑</a>
 </footer>
@@ -3619,7 +3637,10 @@
       const capability = activeSlide.querySelector('.case-header .sample-name')?.textContent.trim();
       const title = activeSlide.querySelector('.case-header h3')?.textContent.trim();
       if (capability && title) {
-        contextTitle.textContent = `Demos of ${capability} · ${title}`;
+        const isChinese = document.documentElement.dataset.contentLang === 'zh';
+        contextTitle.textContent = isChinese
+          ? `${capability} · ${title} 示例`
+          : `Demos of ${capability} · ${title}`;
       }
     }
 
@@ -3652,16 +3673,379 @@
     });
     prev?.addEventListener('click', () => goTo(index - 1));
     next?.addEventListener('click', () => goTo(index + 1));
+    window.joyaiCarouselContextUpdaters = window.joyaiCarouselContextUpdaters || [];
+    window.joyaiCarouselContextUpdaters.push(updateContext);
     updateContext();
   });
+
+  /* ── Language toggle ── */
+  (() => {
+    const root = document.documentElement;
+    const toggle = document.querySelector('[data-lang-toggle]');
+    const storageKey = 'joyai-lang';
+
+    const zhTranslations = [
+      ['.nav-links a[href="#capabilities"]', '能力展示'],
+      ['.nav-links a[href="#approach"]', '方法'],
+      ['.nav-links a[href="#evaluation"]', '评估'],
+      ['.nav-links a[href="#authors"]', '作者'],
+      ['.nav-links a[href="#citation"]', '引用'],
+      ['.hero-meta .date', '· 2026 年 6 月 10 日'],
+      ['.hero-subtitle', '开放实时视频-语言交互模型'],
+      ['.hero-buttons a[href="#capabilities"]', '查看能力 ↓'],
+      ['.hero-media-card:nth-of-type(1) .hero-media-label', 'Intro 视频'],
+      ['.hero-media-card:nth-of-type(2) .hero-media-label', 'Overview 图'],
+      ['.toc-title', '本页目录'],
+      ['.toc-list a[data-section="introduction"]', '引言'],
+      ['.toc-list a[data-section="capabilities"]', '能力展示'],
+      ['.toc-list a[data-section="approach"]', '方法'],
+      ['.toc-list a[data-section="evaluation"]', '评估'],
+      ['.toc-list a[data-section="limitations"]', '总结'],
+      ['.toc-list a[data-section="authors"]', '作者'],
+      ['.toc-list a[data-section="citation"]', '引用'],
+      ['#introduction h2', '引言'],
+      ['#introduction > p:nth-of-type(1)', '真正重要的时刻，往往不会等你开口。锅里的水在你腾不出手时沸出来，孩子走向炉灶，比赛中最精彩的瞬间在你反应过来前就已经过去。等你想到要问 AI 时，那个时刻已经消失了，因为真实世界不会暂停。'],
+      ['#introduction > p:nth-of-type(2)', '今天的 AI 很难帮到这些时刻，这并不是因为它不够快，而是因为它们在设计上就是轮次式的：它们安静地等待你提出问题，然后回答你问的那一句。即使是当下应用里的视频通话功能，本质上也仍然是问答系统，只在被询问或轮询时才反应。它们是为对话而生的，不是为持续存在于一个不断变化的世界而生的。'],
+      ['#introduction > p:nth-of-type(3)', '我们认为下一步应该是一个像人一样“在场”的模型：它会看着眼前正在发生的事，自己判断什么时候值得开口，在重要时刻主动说话，在不需要时保持安静，并在问题过难时交给更强的模型或 agent。Thinking Machines Lab 最近把这称为 <strong>interaction model</strong>。我们相信这是正确方向，也希望把它变成任何人都可以继续构建的东西。', 'html'],
+      ['#introduction > p:nth-of-type(4)', '所以今天我们发布 <strong><em class="accent-word">JoyAI-VL-Interaction</em></strong>：<strong>一个 8B 规模、以视觉为核心的交互模型，并同时开放训练 recipe、数据和完整可部署系统，整个技术栈 fully <em class="accent-word">OPEN</em></strong>。把摄像头或直播流接给它，它就能立刻在场，实时观看并响应。由于模型足够紧凑，系统也运行在标准基础设施上，任何人都可以从一个仓库搭起自己的 always-present assistant。', 'html'],
+      ['#introduction > p:nth-of-type(5)', '在与 Doubao 和 Gemini 应用内视频通话助手的正面对比中，我们覆盖了从直播解说、监控预警到实时记忆的 58 个真实视觉交互案例。人工评审在“说什么”和“什么时候说”两个维度上，都明显更偏好 JoyAI-VL-Interaction。同一套 recipe 还涌现出一些我们并没有显式训练的能力，例如跟随不断变化的购物 App 屏幕进行引导，或根据幻灯片即兴讲解。'],
+      ['#introduction > p:nth-of-type(6)', '我们的目标很简单：把 interaction model 所能带来的能力交到每个人手中，推动多模态 AI 从轮次式对话走向真正的实时在场，并以开放的方式一起前进。下面是它具体的样子。'],
+      ['.core-item:nth-child(1) p', '它能在直播流中持续在场数小时，观看每一秒，并在一秒内响应，而不是只在你发问时才被唤醒。'],
+      ['.core-item:nth-child(2) p', '它会根据自己看到的内容判断什么时候值得说一句，在重要事情发生的瞬间开口，在没有必要时保持安静。'],
+      ['.core-item:nth-child(3) p', '当问题超出实时推理范围时，它会把任务交给后台 agent 或 API，甚至是能在数字世界中操作的 agent，同时自己继续观看，并把后台结果折回实时交互中。'],
+      ['.core-item:nth-child(4) p', '我们发布全部内容：8B 模型、训练 recipe、数据，以及完整可部署系统，让任何人都能从一个仓库运行、复现并继续构建。'],
+      ['#capabilities h2', '能力展示'],
+      ['#capabilities > p:nth-of-type(1)', '当交互能力被训练进模型本身，而不是靠外部 harness 事后拼接，一整类能力就会自然出现。这些正是轮次式助手很难做好的事情：持续在场、在正确时刻行动、感知时间，并在长视频流中记住信息。下面展示九种能力，每一种都是把 interaction 训练进模型后的自然优势。对下面每个 demo，我们都放入了 JoyAI-VL-Interaction 与 Doubao、Gemini 视频通话助手的真实录屏对比，让 interaction model 和 turn-based assistant 在交互风格上的差异一眼可见。'],
+      ['#capabilities > p:nth-of-type(2)', '<span></span><strong><em class="accent-word">点击下方卡片查看对应能力的 demos。</em></strong>', 'html'],
+      ['.capability-summary-item:nth-child(1) p', '实时翻译屏幕中的字幕和文字，跟随视频播放节奏，而不是只回答某一帧。'],
+      ['.capability-summary-item:nth-child(2) p', '持续观看直播画面，并在紧急事件发生的一秒内发出提醒。'],
+      ['.capability-summary-item:nth-child(3) p', '跟随你的手机屏幕，在你使用 App 的过程中，根据当前画面同步引导任务。'],
+      ['.capability-summary-item:nth-child(4) p', '随着屏幕内容展开进行实时解说，从幻灯片到比赛直播都能跟上节奏。'],
+      ['.capability-summary-item:nth-child(5) p', '在目标物体或动作出现时即时计数，并随着每次出现更新结果。'],
+      ['.capability-summary-item:nth-child(6) p', '基于自身对时间流逝的感知行动，例如按固定间隔说话，或在几秒后提醒你。'],
+      ['.capability-summary-item:nth-child(7) p', '保留几分钟前视频流中的有用细节，并在需要时重新调用。'],
+      ['.capability-summary-item:nth-child(8) p', '根据场景变化进行更自然的交互，例如朋友进入画面时立刻打招呼。'],
+      ['.capability-summary-item:nth-child(9) p', '把困难子任务交给后台模型或 agent，同时继续观看并交互，等结果回来后再自然接入。'],
+      ['.capability-context-kicker', '能力 demos'],
+      ['.capability-context-note', '箭头切换能力；样本标签切换 demos。'],
+      ['.carousel-nav-label', '能力'],
+      ['#realtime-translation .sample-instruction', '请实时帮我把字幕翻译成中文/英文。'],
+      ['#realtime-translation .sample-demo:nth-of-type(1) .capability-card:nth-child(1) .cap-body p', '随着视频播放实时翻译，在每次字幕变化时立即跟上，没有遗漏，而不是只回答一次。'],
+      ['#realtime-translation .sample-demo:nth-of-type(1) .capability-card:nth-child(2) .cap-body p', '只翻译了开头和结尾，而且略有延迟，没有持续跟上中间出现的字幕。'],
+      ['#realtime-translation .sample-demo:nth-of-type(1) .capability-card:nth-child(3) .cap-body p', '没有翻译字幕，而是用英文回复，并且只在用户提问时回应了一次。'],
+      ['#realtime-translation .sample-demo:nth-of-type(2) .capability-card:nth-child(1) .cap-body p', '完成了连续实时翻译任务，每次新字幕出现时都能立即翻译且没有遗漏。'],
+      ['#realtime-translation .sample-demo:nth-of-type(2) .capability-card:nth-child(2) .cap-body p', '只关注用户提问时那一帧中的字幕，没有在后续对话中持续翻译。'],
+      ['#realtime-translation .sample-demo:nth-of-type(2) .capability-card:nth-child(3) .cap-body p', '只关注用户提问时那一帧中的字幕，没有在后续对话中持续翻译。'],
+      ['#realtime-alerting .sample-instruction', '当目标事件或动作出现时立即提醒，例如黄牌事件或摔倒。'],
+      ['#realtime-alerting .sample-demo:nth-of-type(1) .capability-card:nth-child(1) .cap-body p', '在黄牌事件出现时快速响应。'],
+      ['#realtime-alerting .sample-demo:nth-of-type(1) .capability-card:nth-child(2) .cap-body p', '在这个案例中大约晚了 20 秒才响应，对于监控任务来说太慢。'],
+      ['#realtime-alerting .sample-demo:nth-of-type(1) .capability-card:nth-child(3) .cap-body p', '注意力停留在较早的上下文中，而不是监控后续视觉事件。'],
+      ['#realtime-alerting .sample-demo:nth-of-type(2) .capability-card:nth-child(1) .cap-body p', '在摔倒发生时立即发出提醒。'],
+      ['#realtime-alerting .sample-demo:nth-of-type(2) .capability-card:nth-child(2) .cap-body p', '延迟数秒后才响应，削弱了安全监控场景中的实用性。'],
+      ['#realtime-alerting .sample-demo:nth-of-type(2) .capability-card:nth-child(3) .cap-body p', '把任务当成回看式视频问答，而不是实时预警任务。'],
+      ['#app-guidance .sample-instruction', '在用户浏览 App 时实时陪伴或引导。'],
+      ['#app-guidance .sample-demo:nth-of-type(1) .capability-card:nth-child(1) .cap-body p', '能够及时回应，并随着 App 屏幕变化持续引导。'],
+      ['#app-guidance .sample-demo:nth-of-type(1) .capability-card:nth-child(2) .cap-body p', '在录制对比中没有主动继续提供引导。'],
+      ['#app-guidance .sample-demo:nth-of-type(1) .capability-card:nth-child(3) .cap-body p', '在录制对比中同样缺少主动后续跟进。'],
+      ['#app-guidance .sample-demo:nth-of-type(2) .capability-card:nth-child(1) .cap-body p', '跟上不断变化的手机屏幕，并按用户要求的节奏进行评论。'],
+      ['#app-guidance .sample-demo:nth-of-type(2) .capability-card:nth-child(2) .cap-body p', '这个案例中只回应了一次，没有持续跟随 App。'],
+      ['#app-guidance .sample-demo:nth-of-type(2) .capability-card:nth-child(3) .cap-body p', '初始识别较强，但仍然表现为一次性回答。'],
+      ['#live-commentary .sample-instruction', '随着场景变化实时解说，并遵循语气、节奏和内容要求。'],
+      ['#live-commentary .sample-demo:nth-of-type(1) .capability-card:nth-child(1) .cap-body p', '跟随画面变化进行有依据的解说，能随着可见宠物变化调整内容。'],
+      ['#live-commentary .sample-demo:nth-of-type(1) .capability-card:nth-child(2) .cap-body p', '只描述了很多镜头中的少数片段，并经常错过真实视觉内容。'],
+      ['#live-commentary .sample-demo:nth-of-type(1) .capability-card:nth-child(3) .cap-body p', '这个案例中只给出一次回应，没有持续跟随视频流。'],
+      ['#live-commentary .sample-demo:nth-of-type(2) .capability-card:nth-child(1) .cap-body p', '保持用户要求的解说节奏，并让叙述持续扎根于变化中的旅行场景。'],
+      ['#live-commentary .sample-demo:nth-of-type(2) .capability-card:nth-child(2) .cap-body p', '只在开头附近评论，没有按照要求持续重复解说。'],
+      ['#live-commentary .sample-demo:nth-of-type(2) .capability-card:nth-child(3) .cap-body p', '回应风格不匹配，也没有在整个场景中持续进行直播解说。'],
+      ['#fast-counting .sample-instruction', '每当目标动作或事件出现时实时计数，例如飞镖命中靶盘或做一次波比跳。'],
+      ['#fast-counting .sample-demo:nth-of-type(1) .capability-card:nth-child(1) .cap-body p', '抓住重复飞镖事件的正确时机。'],
+      ['#fast-counting .sample-demo:nth-of-type(1) .capability-card:nth-child(2) .cap-body p', '只回复了两次，延迟更高，回答也不够合理。'],
+      ['#fast-counting .sample-demo:nth-of-type(1) .capability-card:nth-child(3) .cap-body p', '只说了一次“让我看看”，随后在录制案例中停止回应。'],
+      ['#fast-counting .sample-demo:nth-of-type(2) .capability-card:nth-child(1) .cap-body p', '跟踪重复运动动作，并在正确时刻更新计数。'],
+      ['#fast-counting .sample-demo:nth-of-type(2) .capability-card:nth-child(2) .cap-body p', '只回应一次，错过了连续计数行为。'],
+      ['#fast-counting .sample-demo:nth-of-type(2) .capability-card:nth-child(3) .cap-body p', '在录制对比中没有完成可靠的实时计数。'],
+      ['#time-awareness .sample-instruction', '模型需要感知经过的时间并据此回应，例如 20 秒后回复，或每三秒回应一次。'],
+      ['#time-awareness .sample-demo:nth-of-type(1) .capability-card:nth-child(1) .cap-body p', '能够感知 20 秒的目标时长，在该案例中误差约 2 秒，整体排名第一。'],
+      ['#time-awareness .sample-demo:nth-of-type(1) .capability-card:nth-child(2) .cap-body p', '在录制中没有在游戏结束时提醒用户。'],
+      ['#time-awareness .sample-demo:nth-of-type(1) .capability-card:nth-child(3) .cap-body p', '大约 40 秒时才提醒，在该任务上时间误差更大。'],
+      ['#time-awareness .sample-demo:nth-of-type(2) .capability-card:nth-child(1) .cap-body p', '按照要求的间隔计数，并在收到指令时停止，体现出自身对时间流逝的感知。'],
+      ['#time-awareness .sample-demo:nth-of-type(2) .capability-card:nth-child(2) .cap-body p', '没有可靠地保持用户要求的重复时间节奏。'],
+      ['#time-awareness .sample-demo:nth-of-type(2) .capability-card:nth-child(3) .cap-body p', '短暂回应后停止，没有持续完成定时交互。'],
+      ['#minute-scale-visual-recall .sample-instruction', '记住早些时候出现的视觉细节，并在用户稍后询问时回答。'],
+      ['#minute-scale-visual-recall .sample-demo:nth-of-type(1) .capability-card:nth-child(1) .cap-body p', '能够从早先的视觉上下文中正确回答。'],
+      ['#minute-scale-visual-recall .sample-demo:nth-of-type(1) .capability-card:nth-child(2) .cap-body p', '在录制对比中给出了错误的肉丸数量。'],
+      ['#minute-scale-visual-recall .sample-demo:nth-of-type(1) .capability-card:nth-child(3) .cap-body p', 'Gemini 在该案例中超时，因此没有展示匹配录屏。'],
+      ['#visual-driven-interaction .sample-instruction', '在持续变化的场景中完成多种复杂任务交互。'],
+      ['#visual-driven-interaction .sample-demo:nth-of-type(1) .capability-card .cap-body p', '实时调用后台模型生成 GDP 条形图，同时在每次新人物出现时输出“friend”，并进行多轮问答。'],
+      ['#visual-driven-interaction .sample-demo:nth-of-type(2) .capability-card .cap-body p', '在手机端保持自然闲聊，同时扎根于实时摄像头画面，并随可见场景变化而响应。'],
+      ['#agent-delegation .sample-instruction', '通过自然交互把复杂任务委托给后台模型。'],
+      ['#agent-delegation .sample-demo:nth-of-type(1) .capability-card .cap-body p', '实时调用后台模型复刻手机 App UI；后台处理时，交互模型仍能继续完成其他任务，例如计数。'],
+      ['#agent-delegation .sample-demo:nth-of-type(2) .capability-card .cap-body p', '实时调用后台模型推导微分中值定理证明，同时由交互模型在后台处理期间完成多轮问答。'],
+      ['#more-things > p', '<strong class="section-lead">More Things It Can Do</strong> 除了上面的能力 demos，JoyAI-VL-Interaction 还能做很多事，下面只是其中一些例子。直观来说，它也可以在比赛进行时做实时解说，在你做饭时一步步引导菜谱，或在直播中自动生成弹幕式评论。这只是开始，我们也期待社区探索更多使用方式。', 'html'],
+      ['#more-things .carousel-tab:nth-child(1)', '第 01 页'],
+      ['#more-things .carousel-tab:nth-child(2)', '第 02 页'],
+      ['#more-things .carousel-tab:nth-child(3)', '第 03 页'],
+      ['#more-things .carousel-tab:nth-child(4)', '第 04 页'],
+      ['#more-things .carousel-tab:nth-child(5)', '第 05 页'],
+      ['#more-things .more-card:nth-of-type(1) .more-body p', '根据画面中看到的穿搭提供风格建议。'],
+      ['#more-things .more-card:nth-of-type(2) .more-body p', '回忆 7 分钟前提到的细节。'],
+      ['#more-things .carousel-slide:nth-child(2) .more-card:nth-of-type(1) .more-body p', '在转弯等关键时刻进行实时赛事解说，仍存在少量幻觉。'],
+      ['#more-things .carousel-slide:nth-child(2) .more-card:nth-of-type(2) .more-body p', '从实时视觉场景中主动回应，而不是等待下一轮用户输入。'],
+      ['#more-things .carousel-slide:nth-child(3) .more-card:nth-of-type(1) .more-body p', '围绕当前视觉内容进行自然对话和厨房引导。'],
+      ['#more-things .carousel-slide:nth-child(3) .more-card:nth-of-type(2) .more-body p', '以更有温度和情绪的方式互动，而不是僵硬的一问一答。'],
+      ['#more-things .carousel-slide:nth-child(4) .more-card:nth-of-type(1) .more-body p', '在内容密集的购物场景中保留细粒度视觉记忆。'],
+      ['#more-things .carousel-slide:nth-child(4) .more-card:nth-of-type(2) .more-body p', '根据眼前画面生成内容，并在需要时准确停止。'],
+      ['#more-things .carousel-slide:nth-child(5) .more-card:nth-of-type(1) .more-body p', '当目标商品被检测到时，及时触发回应。'],
+      ['#approach h2', '方法'],
+      ['#approach > p:nth-of-type(1)', 'JoyAI-VL-Interaction 的核心，是模型每一秒都会自主做出的一个决定：说话、保持安静，或委托。我们基于视觉语言指令模型 JoyAI-VL-8B 构建，并把语音输入输出作为可插拔组件，而不是和模型本体强耦合，因此模型唯一需要做的事就是观察并判断行动时机。为了在长视频流中保持实时性，预测式视频编码器 AdaCodec 会对可预测帧只花费少量 token，把完整细节留给场景真正变化的时刻，因此 token 预算会缓慢增长，而不是随着每一帧线性增长。这种行为不是脚本规则，而是学习得到的：我们使用超过四百万个按秒对齐的交互片段训练模型，逐秒标注何时说话、保持安静或委托，并进一步用强化学习优化。我们发布数据和完整 recipe，方便复现和扩展。'],
+      ['#approach > p:nth-of-type(2)', '围绕这个模型，我们构建了一个完整可部署系统，让它开箱即用。模型是唯一决定何时行动的部分；其余都是围绕它排列的可插拔组件：用于语音的流式 ASR 和 TTS、能跨小时保留有用细节的长程记忆、可视化 UI，以及一个桥接模块，让模型可以把困难子任务交给任何后台模型、API 或 agent，并在继续观看的同时把结果折回交互中。整个技术栈运行在标准 vLLM 基础设施上，支持长会话实时运行，任何组件也都可以替换为部署方自己的实现，而不需要重建其余部分。'],
+      ['#approach > p:nth-of-type(3)', '我们正在开放全部内容：8B 模型、训练 recipe、数据和可部署系统，让任何人都能搭建一个实时、始终在场的 assistant，并在开放环境中继续推进 interaction-model 方向。完整发布预计在 <strong>2026 年 6 月 20 日</strong> 完成，地址为 <a href="https://github.com/jd-opensource/JoyAI-VL-Interaction">https://github.com/jd-opensource/JoyAI-VL-Interaction</a>。', 'html'],
+      ['.method-card:nth-child(1) p', '首个开放的视觉语言交互模型。'],
+      ['.method-card:nth-child(2) p', '数据规模仍远未饱和，继续扩展会带来明确收益。'],
+      ['.method-card:nth-child(3) p', '一个开箱即用的可部署系统。'],
+      ['#evaluation h2', '评估'],
+      ['#evaluation > p:nth-of-type(1)', '我们在 58 个真实、事件驱动的视觉交互场景中评估模型。每个样本都会录制 JoyAI-VL-Interaction 与对应应用内视频通话助手的实时视频交互，并由人工评审从响应质量和时机两个维度进行成对判断。这样可以让评估尽量贴近我们关心的产品场景：当画面真正运动时，助手是否在正确时刻说出正确内容。'],
+      ['#evaluation > p:nth-of-type(2)', '每个 aspect 都对应评估台账中的一个场景类别。这里的 memory 类别是分钟级视觉回忆设置，案例大多跨度为几分钟到十多分钟。表格报告的是人工评审在成对比较中更偏好 JoyAI-VL-Interaction、认为平局，或更偏好 baseline 的比例。'],
+      ['#evaluation .benchmark-callout', '最终整体结果中，JoyAI-VL-Interaction 在与 Doubao 的成对比较中胜出 <span class="benchmark-score">77.6%</span>，在与 Gemini 的成对比较中胜出 <span class="benchmark-score">87.9%</span>，平局单独列在下方表格中。优势最明显的是最强调时机的场景：在 monitoring and alerting 中，它对两个系统都赢下全部比较；在 real-time translation 和 counting 中也从未输过，正是这些事件驱动、需要在正确时刻行动的任务，轮次式产品在结构上最容易错过。', 'html'],
+      ['#evaluation th:nth-child(1)', '评估维度'],
+      ['#evaluation th:nth-child(3)', '平局'],
+      ['#evaluation tbody tr:last-child td:first-child', '总体'],
+      ['#limitations h2', '总结'],
+      ['#limitations > p:nth-of-type(1)', '<strong class="section-lead">Limitations</strong> 我们希望坦诚说明规模差异。我们对比的视频通话助手 Doubao 和 Gemini 背后是更大规模的模型，也经过多年面向真实用户的产品迭代；它们能力全面、知识广泛，在开放聊天、个人风格和日常请求长尾上都很难击败。JoyAI-VL-Interaction 是一个紧凑的 8B 模型，我们并不声称它在所有方面都能匹配这些系统。我们真正做的是推开一扇门：在视觉语言交互模型的优势区，也就是实时在场、视觉触发的主动性，以及跨视频流的时间感知上，一个小得多的开放模型已经能够领先。一个紧凑、开放的模型可以在这些方向上击败大型、深度优化的产品，这正是我们兴奋地把这项工作交给社区的原因。', 'html'],
+      ['#limitations > p:nth-of-type(2)', '<strong class="section-lead">What\'s next, and an invitation</strong> 我们认为这只是开始。我们训练所用的交互数据仍然不大，但即便如此，模型已经涌现出一些并未显式训练的能力，例如跟随不断变化的购物 App 屏幕进行引导；我们相信这里还有很大空间，继续扩展这种时间对齐数据，并开放 recipe 和系统，会把模型推得更远。我们想抵达的是一个日常时刻：你结束漫长一天回到家，还没开口，一个安静的声音已经注意到你，并说：“我看得出来你很累，今天一定很辛苦。”这种未经请求却自然发生的在场感，正是 interaction model 让人期待的地方，而一个等待被提问的轮次式模型永远无法做到。我们已经开放完整技术栈，包括 8B 模型、时间对齐数据、训练 recipe 和可部署系统，希望降低所有继续探索这个方向的门槛。我们期待与你一起探索，一个真正存在于世界中的模型还能变成什么。', 'html'],
+      ['#authors h2', '作者'],
+      ['.authors-block .contribution-note', '<sup>*</sup> 共同一作 &nbsp; <sup>†</sup> 项目负责人 &nbsp; <sup>✉</sup> 通讯作者', 'html'],
+      ['#citation h2', '引用'],
+      ['.copy-btn', '复制'],
+      ['.page-views-label', '访问量'],
+      ['footer > a', '返回顶部 ↑']
+    ];
+
+    zhTranslations.push(
+      ['#introduction > p:nth-of-type(3)', '我们认为下一步应该是一个像人一样“在场”的模型：它会看着眼前正在发生的事，自己判断什么时候值得开口，在重要时刻主动说话，在不需要时保持安静，并在问题过难时交给更强的模型或智能体。Thinking Machines Lab 最近把这称为 <strong>interaction model</strong>。我们相信这是正确方向，也希望把它变成任何人都可以继续构建的开放起点。', 'html'],
+      ['#introduction > p:nth-of-type(4)', '所以今天我们发布 <strong><em class="accent-word">JoyAI-VL-Interaction</em></strong>：<strong>一个 8B 规模、以视觉为核心的交互模型，并同时开放训练方案、数据和完整可部署系统，整个技术栈全开源</strong>。把摄像头或直播流接给它，它就能立刻进入现场，实时观看并响应。由于模型足够紧凑，系统也运行在标准基础设施上，任何人都可以从一个仓库搭起自己的实时在场助手。', 'html'],
+      ['#introduction > p:nth-of-type(5)', '在与豆包和 Gemini 应用内视频通话助手的正面对比中，我们覆盖了从直播解说、监控预警到实时记忆的 58 个真实视觉交互案例。人工评审在“说什么”和“什么时候说”两个维度上，都明显更偏好 JoyAI-VL-Interaction。同一套训练方案还涌现出一些我们并没有显式训练的能力，例如跟随不断变化的购物 App 屏幕进行引导，或根据幻灯片即兴讲解。'],
+      ['#introduction > p:nth-of-type(6)', '我们的目标很简单：把 interaction model 所打开的可能性交到更多人手中，推动多模态 AI 从轮次式对话走向真正的实时在场，并以开放的方式一起前进。下面从几个具体能力和案例开始。'],
+      ['.core-item:nth-child(1) .core-heading strong', '实时在场'],
+      ['.core-item:nth-child(2) .core-heading strong', '视觉触发的主动响应'],
+      ['.core-item:nth-child(3) .core-heading strong', '智能体委托'],
+      ['.core-item:nth-child(4) .core-heading strong', '全开源技术栈'],
+      ['.core-item:nth-child(3) p', '当问题超出实时推理范围时，它会把任务交给后台智能体或 API，甚至是能在数字世界中操作的智能体，同时自己继续观看，并把后台结果接回实时交互中。'],
+      ['.core-item:nth-child(4) p', '我们发布全部内容：8B 模型、训练方案、数据，以及完整可部署系统，让任何人都能从一个仓库运行、复现并继续构建。'],
+      ['#capabilities > p:nth-of-type(1)', '当交互能力被训练进模型本身，而不是靠外部框架事后拼接，一整类能力就会自然出现。这些正是轮次式助手很难做好的事情：持续在场、在正确时刻行动、感知时间，并在长视频流中记住信息。下面展示九种能力，每一种都是把 interaction 训练进模型后的自然优势。对下面每个示例，我们都放入了 JoyAI-VL-Interaction 与豆包、Gemini 视频通话助手的真实录屏对比，让交互模型和轮次式助手在交互风格上的差异一眼可见。'],
+      ['#capabilities > p:nth-of-type(2)', '<span></span><strong><em class="accent-word">点击下方卡片查看对应能力示例。</em></strong>', 'html'],
+      ['.capability-summary-item:nth-child(1) .feature-heading strong', '实时翻译'],
+      ['.capability-summary-item:nth-child(2) .feature-heading strong', '监控与预警'],
+      ['.capability-summary-item:nth-child(3) .feature-heading strong', 'App 引导'],
+      ['.capability-summary-item:nth-child(4) .feature-heading strong', '直播解说'],
+      ['.capability-summary-item:nth-child(5) .feature-heading strong', '实时计数'],
+      ['.capability-summary-item:nth-child(6) .feature-heading strong', '时间感知'],
+      ['.capability-summary-item:nth-child(7) .feature-heading strong', '长程视觉记忆（5 分钟以上）'],
+      ['.capability-summary-item:nth-child(8) .feature-heading strong', '视觉驱动交互'],
+      ['.capability-summary-item:nth-child(9) .feature-heading strong', '智能体委托'],
+      ['.capability-context-kicker', '能力示例'],
+      ['.capability-context-note', '左右箭头切换能力；样本标签切换示例。'],
+      ['#realtime-translation .case-header .sample-name', '能力 01'],
+      ['#realtime-alerting .case-header .sample-name', '能力 02'],
+      ['#app-guidance .case-header .sample-name', '能力 03'],
+      ['#live-commentary .case-header .sample-name', '能力 04'],
+      ['#fast-counting .case-header .sample-name', '能力 05'],
+      ['#time-awareness .case-header .sample-name', '能力 06'],
+      ['#minute-scale-visual-recall .case-header .sample-name', '能力 07'],
+      ['#visual-driven-interaction .case-header .sample-name', '能力 08'],
+      ['#agent-delegation .case-header .sample-name', '能力 09'],
+      ['#realtime-translation .case-header h3', '实时翻译'],
+      ['#realtime-alerting .case-header h3', '监控与预警'],
+      ['#app-guidance .case-header h3', 'App 引导'],
+      ['#live-commentary .case-header h3', '直播解说'],
+      ['#fast-counting .case-header h3', '实时计数'],
+      ['#time-awareness .case-header h3', '时间感知'],
+      ['#minute-scale-visual-recall .case-header h3', '长程视觉记忆（5 分钟以上）'],
+      ['#visual-driven-interaction .case-header h3', '视觉驱动交互'],
+      ['#agent-delegation .case-header h3', '真实场景中的智能体委托'],
+      ['#realtime-translation .case-tag', '实时翻译'],
+      ['#realtime-alerting .case-tag', '监控与预警'],
+      ['#app-guidance .case-tag', 'App 引导'],
+      ['#live-commentary .case-tag', '直播解说'],
+      ['#fast-counting .case-tag', '实时计数'],
+      ['#time-awareness .case-tag', '时间感知'],
+      ['#minute-scale-visual-recall .case-tag', '长程视觉记忆（5 分钟以上）'],
+      ['#visual-driven-interaction .case-tag', '视觉驱动交互'],
+      ['#agent-delegation .case-tag', '智能体委托'],
+      ['#realtime-translation .sample-demo:nth-of-type(1) h4', '药店就诊动画翻译'],
+      ['#realtime-translation .sample-demo:nth-of-type(2) h4', '街头采访翻译'],
+      ['#realtime-alerting .sample-demo:nth-of-type(1) h4', '黄牌事件预警'],
+      ['#realtime-alerting .sample-demo:nth-of-type(2) h4', '摔倒检测预警'],
+      ['#app-guidance .sample-demo:nth-of-type(1) h4', '购物 App 引导'],
+      ['#app-guidance .sample-demo:nth-of-type(2) h4', '转转 App 实时讲解'],
+      ['#live-commentary .sample-demo:nth-of-type(1) h4', '宠物直播解说'],
+      ['#live-commentary .sample-demo:nth-of-type(2) h4', '旅行场景解说'],
+      ['#fast-counting .sample-demo:nth-of-type(1) h4', '飞镖投掷计数'],
+      ['#fast-counting .sample-demo:nth-of-type(2) h4', '波比跳计数'],
+      ['#time-awareness .sample-demo:nth-of-type(1) h4', '烹饪场景定时提醒'],
+      ['#time-awareness .sample-demo:nth-of-type(2) h4', '灶台清洁计时'],
+      ['#minute-scale-visual-recall .sample-demo:nth-of-type(1) h4', '肉丸数量回忆'],
+      ['#visual-driven-interaction .sample-demo:nth-of-type(1) h4', '场景感知闲聊'],
+      ['#visual-driven-interaction .sample-demo:nth-of-type(2) h4', '手机端实时闲聊'],
+      ['#agent-delegation .sample-demo:nth-of-type(1) h4', '手机 App 委托'],
+      ['#agent-delegation .sample-demo:nth-of-type(2) h4', '微分中值定理委托'],
+      ['#realtime-translation .sample-demo .sample-name', '示例'],
+      ['#realtime-alerting .sample-demo .sample-name', '示例'],
+      ['#app-guidance .sample-demo .sample-name', '示例'],
+      ['#live-commentary .sample-demo .sample-name', '示例'],
+      ['#fast-counting .sample-demo .sample-name', '示例'],
+      ['#time-awareness .sample-demo .sample-name', '示例'],
+      ['#minute-scale-visual-recall .sample-demo .sample-name', '示例'],
+      ['#visual-driven-interaction .sample-demo .sample-name', '示例'],
+      ['#agent-delegation .sample-demo .sample-name', '示例'],
+      ['#realtime-translation .model-label', (el) => el.textContent.includes('Doubao') ? el.innerHTML.replace('Doubao', '豆包') : el.innerHTML, 'transform'],
+      ['#realtime-alerting .model-label', (el) => el.textContent.includes('Doubao') ? el.innerHTML.replace('Doubao', '豆包') : el.innerHTML, 'transform'],
+      ['#app-guidance .model-label', (el) => el.textContent.includes('Doubao') ? el.innerHTML.replace('Doubao', '豆包') : el.innerHTML, 'transform'],
+      ['#live-commentary .model-label', (el) => el.textContent.includes('Doubao') ? el.innerHTML.replace('Doubao', '豆包') : el.innerHTML, 'transform'],
+      ['#fast-counting .model-label', (el) => el.textContent.includes('Doubao') ? el.innerHTML.replace('Doubao', '豆包') : el.innerHTML, 'transform'],
+      ['#time-awareness .model-label', (el) => el.textContent.includes('Doubao') ? el.innerHTML.replace('Doubao', '豆包') : el.innerHTML, 'transform'],
+      ['#minute-scale-visual-recall .model-label', (el) => el.textContent.includes('Doubao') ? el.innerHTML.replace('Doubao', '豆包') : el.innerHTML, 'transform'],
+      ['#more-things > p', '<strong class="section-lead">还能做哪些？</strong> 除了上面的能力示例，JoyAI-VL-Interaction 还能做很多事，下面只是其中一些例子。直观来说，它也可以在比赛进行时做实时解说，在你做饭时一步步引导菜谱，或在直播中自动生成弹幕式评论。这只是开始，我们也期待社区探索更多使用方式。', 'html'],
+      ['#more-things .more-card:nth-of-type(1) .more-body span', '穿搭指导'],
+      ['#more-things .more-card:nth-of-type(1) .more-body strong', '根据镜头内容给出穿搭建议'],
+      ['#more-things .more-card:nth-of-type(2) .more-body span', '细节回忆'],
+      ['#more-things .more-card:nth-of-type(2) .more-body strong', '记住转瞬即逝的视觉细节'],
+      ['#more-things .carousel-slide:nth-child(2) .more-card:nth-of-type(1) .more-body span', '赛事解说'],
+      ['#more-things .carousel-slide:nth-child(2) .more-card:nth-of-type(1) .more-body strong', '为高速变化的场景实时解说'],
+      ['#more-things .carousel-slide:nth-child(2) .more-card:nth-of-type(2) .more-body span', '主动响应'],
+      ['#more-things .carousel-slide:nth-child(2) .more-card:nth-of-type(2) .more-body strong', '在关键时刻主动开口'],
+      ['#more-things .carousel-slide:nth-child(3) .more-card:nth-of-type(1) .more-body span', '做饭指导'],
+      ['#more-things .carousel-slide:nth-child(3) .more-card:nth-of-type(1) .more-body strong', '免手持的厨房助手'],
+      ['#more-things .carousel-slide:nth-child(3) .more-card:nth-of-type(2) .more-body span', '情感陪伴'],
+      ['#more-things .carousel-slide:nth-child(3) .more-card:nth-of-type(2) .more-body strong', '共享视觉场景中的陪伴感'],
+      ['#more-things .carousel-slide:nth-child(4) .more-card:nth-of-type(1) .more-body span', '分钟级视觉回忆'],
+      ['#more-things .carousel-slide:nth-child(4) .more-card:nth-of-type(1) .more-body strong', '跨浏览过程回忆细节'],
+      ['#more-things .carousel-slide:nth-child(4) .more-card:nth-of-type(2) .more-body span', '视觉创作'],
+      ['#more-things .carousel-slide:nth-child(4) .more-card:nth-of-type(2) .more-body strong', '基于眼前场景进行创作'],
+      ['#more-things .carousel-slide:nth-child(5) .more-card:nth-of-type(1) .more-body span', '帮忙找东西'],
+      ['#more-things .carousel-slide:nth-child(5) .more-card:nth-of-type(1) .more-body strong', '目标出现时及时提醒'],
+      ['#approach > p:nth-of-type(1)', 'JoyAI-VL-Interaction 的核心，是模型每一秒都会自主做出的一个决定：说话、保持安静，或委托。我们基于视觉语言指令模型 JoyAI-VL-8B 构建，并把语音输入输出作为可插拔组件，而不是和模型本体强耦合，因此模型唯一需要做的事就是观察并判断行动时机。为了在长视频流中保持实时性，预测式视频编码器 AdaCodec 会对可预测帧只花费少量 token，把完整细节留给场景真正变化的时刻，因此 token 预算会缓慢增长，而不是随着每一帧线性增长。这种行为不是脚本规则，而是学习得到的：我们使用超过四百万个按秒对齐的交互片段训练模型，逐秒标注何时说话、保持安静或委托，并进一步用强化学习优化。我们发布数据和完整训练方案，方便复现和扩展。'],
+      ['#approach > p:nth-of-type(3)', '我们正在开源全部内容：8B 模型、训练方案、数据和可部署系统，让任何人都能搭建一个实时、始终在场的助手，并在开放环境中继续推进 interaction-model 方向。完整发布预计在 <strong>2026 年 6 月 20 日</strong> 完成，地址为 <a href="https://github.com/jd-opensource/JoyAI-VL-Interaction">https://github.com/jd-opensource/JoyAI-VL-Interaction</a>。', 'html'],
+      ['#evaluation > p:nth-of-type(1)', '我们在 58 个真实、事件驱动的视觉交互场景中评估模型。每个样本都会录制 JoyAI-VL-Interaction 与对应应用内视频通话助手的实时视频交互，并由人工评审从响应质量和响应时机两个维度进行成对判断。这样可以让评估尽量贴近我们关心的产品场景：当画面真正运动时，助手是否在正确时刻说出正确内容。'],
+      ['#evaluation > p:nth-of-type(2)', '每个评估维度都对应评估台账中的一个场景类别。这里的视觉记忆类别是分钟级回忆设置，案例大多跨度为几分钟到十多分钟。表格报告的是人工评审在成对比较中更偏好 JoyAI-VL-Interaction、认为平局，或更偏好基线系统的比例。'],
+      ['#evaluation .benchmark-callout', '最终整体结果中，JoyAI-VL-Interaction 在与豆包的成对比较中胜出 <span class="benchmark-score">77.6%</span>，在与 Gemini 的成对比较中胜出 <span class="benchmark-score">87.9%</span>，平局单独列在下方表格中。优势最明显的是最强调时机的场景：在监控与预警中，它面对两个系统都取得了全胜；在实时翻译和实时计数中也从未输过，正是这些事件驱动、需要在正确时刻行动的任务，轮次式产品在结构上最容易错过。', 'html'],
+      ['.benchmark-title:nth-of-type(1)', 'JoyAI-VL-Interaction vs 豆包'],
+      ['#evaluation th:nth-child(4)', (el) => el.textContent.trim() === 'Doubao' ? '豆包' : el.textContent, 'transformText'],
+      ['#evaluation tbody tr:nth-child(1) td:first-child', '监控与预警'],
+      ['#evaluation tbody tr:nth-child(2) td:first-child', '实时计数'],
+      ['#evaluation tbody tr:nth-child(3) td:first-child', '实时翻译'],
+      ['#evaluation tbody tr:nth-child(4) td:first-child', '时间感知'],
+      ['#evaluation tbody tr:nth-child(5) td:first-child', '直播解说与引导'],
+      ['#evaluation tbody tr:nth-child(6) td:first-child', '长程视觉记忆'],
+      ['#limitations > p:nth-of-type(1)', '<strong class="section-lead">Limitations</strong> 我们希望坦诚说明规模差异。我们对比的视频通话助手豆包和 Gemini 背后是更大规模的模型，也经过多年面向真实用户的产品迭代；它们能力全面、知识广泛，在开放聊天、个性化表达和日常复杂请求上都很难击败。JoyAI-VL-Interaction 是一个紧凑的 8B 模型，我们并不声称它在所有方面都能匹配这些系统。我们真正做的是推开一扇门：在视觉语言交互模型的优势区，也就是实时在场、视觉触发的主动性，以及跨视频流的时间感知上，一个小得多的开放模型已经能够领先。一个紧凑、开放的模型可以在这些方向上击败大型、深度优化的产品，这正是我们兴奋地把这项工作交给社区的原因。', 'html'],
+      ['#limitations > p:nth-of-type(2)', '<strong class="section-lead">What\'s next, and an invitation</strong> 我们认为这只是开始。我们训练所用的交互数据仍然不大，但即便如此，模型已经涌现出一些并未显式训练的能力，例如跟随不断变化的购物 App 屏幕进行引导；我们相信这里还有很大空间，继续扩展这种时间对齐数据，并开放训练方案和系统，会把模型推得更远。我们想抵达的是一个日常时刻：你结束漫长一天回到家，还没开口，一个安静的声音已经注意到你，并说：“我看得出来你很累，今天一定很辛苦。”这种未经请求却自然发生的在场感，正是 interaction model 让人期待的地方，而一个等待被提问的轮次式模型永远无法做到。我们已经开放完整技术栈，包括 8B 模型、时间对齐数据、训练方案和可部署系统，希望降低所有继续探索这个方向的门槛。我们期待与你一起探索，一个真正存在于世界中的模型还能变成什么。', 'html'],
+      ['#authors .author-row:nth-child(1)', '<span class="lead">姚丁钰</span><sup>*</sup> &nbsp; <span class="lead">周俊豪</span><sup>*</sup> &nbsp; <span class="lead">杨晨旭</span><sup>*</sup> &nbsp; <span class="lead">秦川于</span><sup>*</sup> &nbsp; <span class="lead">侯皓文</span><sup>*</sup>', 'html'],
+      ['#authors .author-row:nth-child(2)', '梁哲铭 &nbsp; 王聪聪 &nbsp; 曹钰杭 &nbsp; 叶盛隆 &nbsp; 谢帅 &nbsp; 顾树焕', 'html'],
+      ['#authors .author-row:nth-child(3)', '黄浩洋 &nbsp; <span class="lead">佀庆一</span><sup>*,†</sup> &nbsp; <span class="lead">段楠</span><sup>✉</sup> &nbsp; <span class="lead">王佳琦</span><sup>✉</sup>', 'html'],
+      ['.authors-block .institution', '京东探索研究院，京东集团'],
+      ['#realtime-translation .sample-demo-tab:nth-child(1)', '药店就诊动画翻译'],
+      ['#realtime-translation .sample-demo-tab:nth-child(2)', '街头采访翻译'],
+      ['#realtime-alerting .sample-demo-tab:nth-child(1)', '黄牌事件预警'],
+      ['#realtime-alerting .sample-demo-tab:nth-child(2)', '摔倒检测预警'],
+      ['#app-guidance .sample-demo-tab:nth-child(1)', '购物 App 引导'],
+      ['#app-guidance .sample-demo-tab:nth-child(2)', '转转 App 实时讲解'],
+      ['#live-commentary .sample-demo-tab:nth-child(1)', '宠物直播解说'],
+      ['#live-commentary .sample-demo-tab:nth-child(2)', '旅行场景解说'],
+      ['#fast-counting .sample-demo-tab:nth-child(1)', '飞镖投掷计数'],
+      ['#fast-counting .sample-demo-tab:nth-child(2)', '波比跳计数'],
+      ['#time-awareness .sample-demo-tab:nth-child(1)', '烹饪场景定时提醒'],
+      ['#time-awareness .sample-demo-tab:nth-child(2)', '灶台清洁计时'],
+      ['#visual-driven-interaction .sample-demo-tab:nth-child(1)', '场景感知闲聊'],
+      ['#visual-driven-interaction .sample-demo-tab:nth-child(2)', '手机端实时闲聊'],
+      ['#agent-delegation .sample-demo-tab:nth-child(1)', '手机 App 委托'],
+      ['#agent-delegation .sample-demo-tab:nth-child(2)', '微分中值定理委托'],
+      ['.method-card:nth-child(1) span', '模型'],
+      ['.method-card:nth-child(2) span', '数据'],
+      ['.method-card:nth-child(3) span', '系统'],
+      ['.method-card:nth-child(1) p', '首个开源的视觉语言交互模型。'],
+      ['.hero-meta .team-tag', '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg> JoyAI-VL 视频理解团队 @ 京东探索研究院，京东集团', 'html'],
+      ['.hero-media-card:nth-of-type(1) .hero-media-label', '介绍视频'],
+      ['.hero-media-card:nth-of-type(2) .hero-media-label', '总览图'],
+      ['.method-card:nth-child(2) strong', '400 万时间对齐交互样本'],
+      ['.method-card:nth-child(2) p', '数据规模仍远未饱和，继续扩展会带来明确收益。'],
+      ['.method-card:nth-child(3) p', '一个开箱即用的可部署系统。'],
+      ['#limitations > p:nth-of-type(1)', '<strong class="section-lead">局限性</strong> 我们希望坦诚说明规模差异。我们对比的视频通话助手豆包和 Gemini 背后是更大规模的模型，也经过多年面向真实用户的产品迭代；它们能力全面、知识广泛，在开放聊天、个性化表达和日常复杂请求上都很难击败。JoyAI-VL-Interaction 是一个紧凑的 8B 模型，我们并不声称它在所有方面都能匹配这些系统。我们真正做的是推开一扇门：在视觉语言交互模型的优势区，也就是实时在场、视觉触发的主动性，以及跨视频流的时间感知上，一个小得多的开放模型已经能够领先。一个紧凑、开放的模型可以在这些方向上击败大型、深度优化的产品，这正是我们兴奋地把这项工作交给社区的原因。', 'html'],
+      ['#limitations > p:nth-of-type(2)', '<strong class="section-lead">下一步，以及一个邀请</strong> 我们认为这只是开始。我们训练所用的交互数据仍然不大，但即便如此，模型已经涌现出一些并未显式训练的能力，例如跟随不断变化的购物 App 屏幕进行引导；我们相信这里还有很大空间，继续扩展这种时间对齐数据，并开放训练方案和系统，会把模型推得更远。我们想抵达的是一个日常时刻：你结束漫长一天回到家，还没开口，一个安静的声音已经注意到你，并说：“我看得出来你很累，今天一定很辛苦。”这种未经请求却自然发生的在场感，正是 interaction model 让人期待的地方，而一个等待被提问的轮次式模型永远无法做到。我们已经开放完整技术栈，包括 8B 模型、时间对齐数据、训练方案和可部署系统，希望降低所有继续探索这个方向的门槛。我们期待与你一起探索，一个真正存在于世界中的模型还能变成什么。', 'html'],
+      ['footer .footer-meta > span:first-child', '© 2026 JoyAI-VL 视频理解团队，京东探索研究院，京东集团']
+    );
+
+    zhTranslations.push(
+      ['.hero-buttons .btn-primary', (el, original) => original.replace('Report', '技术报告'), 'transform'],
+      ['.hero-buttons .btn-outline[href*="github.com/joyai-vl-video-future-academy-jd/JoyAI-VL-Interaction/"]', (el, original) => original.replace('Code', '代码'), 'transform'],
+      ['#introduction > p:nth-of-type(6)', '我们的目标很简单：把 interaction model 所打开的可能性交到更多人手中，推动多模态 AI 从轮次式对话走向真正的实时在场，并以开放的方式一起前进。这项工作包含以下四个特性。'],
+      ['.core-item:nth-child(4) .core-heading strong', '<em class="accent-word">全开源</em>技术栈', 'html'],
+      ['#limitations > p:nth-of-type(2)', '<strong class="section-lead">下一步，以及一个邀请</strong> 我们认为这只是开始。我们训练所用的交互数据仍然不大，但即便如此，模型已经涌现出一些并未显式训练的能力，例如跟随不断变化的购物 App 屏幕进行引导；我们相信这里还有很大空间，继续扩展这种时间对齐数据，并开放训练方案和系统，会把模型推得更远。我们想抵达的是一个日常时刻：你结束漫长一天回到家，还没开口，一个安静的声音已经注意到你，并说：“我看得出来你很累，今天一定很辛苦吧。”这种未经请求却自然发生的在场感，正是 interaction model 让人期待的地方，而一个等待被提问的轮次式模型永远无法做到。我们已经开放完整技术栈，包括 8B 模型、时间对齐数据、训练方案和可部署系统，希望降低所有继续探索这个方向的门槛。我们期待与你一起探索，一个真正存在于世界中的模型还能变成什么。', 'html']
+    );
+
+    function rememberOriginal(el) {
+      if (!el.dataset.i18nOriginalHtml) {
+        el.dataset.i18nOriginalHtml = el.innerHTML;
+      }
+    }
+
+    function applyLanguage(lang) {
+      const isZh = lang === 'zh';
+      root.dataset.contentLang = isZh ? 'zh' : '';
+      if (!isZh) delete root.dataset.contentLang;
+      root.lang = isZh ? 'zh-CN' : 'en';
+
+      zhTranslations.forEach(([selector, value, mode]) => {
+        document.querySelectorAll(selector).forEach(el => {
+          rememberOriginal(el);
+          if (isZh) {
+            if (mode === 'transform' && typeof value === 'function') {
+              el.innerHTML = value(el, el.dataset.i18nOriginalHtml);
+            } else if (mode === 'transformText' && typeof value === 'function') {
+              el.textContent = value(el, el.dataset.i18nOriginalHtml);
+            } else if (mode === 'html') {
+              el.innerHTML = value;
+            } else {
+              el.textContent = value;
+            }
+          } else {
+            el.innerHTML = el.dataset.i18nOriginalHtml;
+          }
+        });
+      });
+
+      if (toggle) {
+        toggle.textContent = isZh ? 'EN' : 'ZH';
+        const label = isZh ? 'Switch to English' : 'Switch to Chinese';
+        toggle.setAttribute('aria-label', label);
+        toggle.setAttribute('title', label);
+      }
+
+      window.joyaiCarouselContextUpdaters?.forEach(update => update());
+
+      try { localStorage.setItem(storageKey, isZh ? 'zh' : 'en'); } catch (_) {}
+    }
+
+    toggle?.addEventListener('click', () => {
+      applyLanguage(root.dataset.contentLang === 'zh' ? 'en' : 'zh');
+    });
+
+    let initialLang = root.dataset.contentLang === 'zh' ? 'zh' : 'en';
+    try {
+      const savedLang = localStorage.getItem(storageKey);
+      if (savedLang === 'zh' || savedLang === 'en') initialLang = savedLang;
+    } catch (_) {}
+    applyLanguage(initialLang);
+    window.applyJoyAILanguage = applyLanguage;
+  })();
 
   /* ── Copy BibTeX ── */
   function copyBibtex() {
     const code = document.querySelector('.bibtex-block code').textContent;
     navigator.clipboard.writeText(code).then(() => {
       const btn = document.querySelector('.copy-btn');
-      btn.textContent = 'Copied!';
-      setTimeout(() => btn.textContent = 'Copy', 2000);
+      const isChinese = document.documentElement.dataset.contentLang === 'zh';
+      btn.textContent = isChinese ? '已复制' : 'Copied!';
+      setTimeout(() => btn.textContent = isChinese ? '复制' : 'Copy', 2000);
     });
   }
 
