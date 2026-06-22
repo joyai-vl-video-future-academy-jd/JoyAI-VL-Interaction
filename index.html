@@ -2042,6 +2042,14 @@
       <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
       Code
     </a>
+    <a href="https://huggingface.co/jdopensource/JoyAI-VL-Interaction-Preview" class="btn btn-outline">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96 12 12.01l8.73-5.05"/><path d="M12 22.08V12"/></svg>
+      Model
+    </a>
+    <a href="https://huggingface.co/datasets/jdopensource/JoyAI-VL-Interaction" class="btn btn-outline">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 11v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6"/></svg>
+      Dataset
+    </a>
     <a href="#capabilities" class="btn btn-outline">Capabilities ↓</a>
   </div>
 </header>
@@ -3980,7 +3988,9 @@
 
     zhTranslations.push(
       ['.hero-buttons .btn-primary', (el, original) => original.replace('Report', '技术报告'), 'transform'],
-      ['.hero-buttons .btn-outline[href*="github.com/joyai-vl-video-future-academy-jd/JoyAI-VL-Interaction/"]', (el, original) => original.replace('Code', '代码'), 'transform'],
+      ['.hero-buttons .btn-outline[href*="github.com/jd-opensource/JoyAI-VL-Interaction"]', (el, original) => original.replace('Code', '代码'), 'transform'],
+      ['.hero-buttons .btn-outline[href*="huggingface.co/jdopensource/JoyAI-VL-Interaction-Preview"]', (el, original) => original.replace('Model', '模型'), 'transform'],
+      ['.hero-buttons .btn-outline[href*="huggingface.co/datasets/jdopensource/JoyAI-VL-Interaction"]', (el, original) => original.replace('Dataset', '数据'), 'transform'],
       ['#introduction > p:nth-of-type(6)', '我们的目标很简单：把 interaction model 所打开的可能性交到更多人手中，推动多模态 AI 从轮次式对话走向真正的实时在场，并以开放的方式一起前进。这项工作包含以下四个特性。'],
       ['.core-item:nth-child(4) .core-heading strong', '<em class="accent-word">全开源</em>技术栈', 'html'],
       ['#limitations > p:nth-of-type(2)', '<strong class="section-lead">下一步，以及一个邀请</strong> 我们认为这只是开始。我们训练所用的交互数据仍然不大，但即便如此，模型已经涌现出一些并未显式训练的能力，例如跟随不断变化的购物 App 屏幕进行引导；我们相信这里还有很大空间，继续扩展这种时间对齐数据，并开放训练方案和系统，会把模型推得更远。我们想抵达的是一个日常时刻：你结束漫长一天回到家，还没开口，一个安静的声音已经注意到你，并说：“我看得出来你很累，今天一定很辛苦吧。”这种未经请求却自然发生的在场感，正是 interaction model 让人期待的地方，而一个等待被提问的轮次式模型永远无法做到。我们已经开放完整技术栈，包括 8B 模型、时间对齐数据、训练方案和可部署系统，希望降低所有继续探索这个方向的门槛。我们期待与你一起探索，一个真正存在于世界中的模型还能变成什么。', 'html']
