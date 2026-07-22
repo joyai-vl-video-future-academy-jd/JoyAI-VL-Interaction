@@ -3422,7 +3422,7 @@
 
     <div class="benchmark-title qwen-benchmark-title">JoyAI-VL-Interaction vs Qwen3-VL-8B-Instruct</div>
     <p class="qwen-benchmark-note">
-      Across <strong>23 standard video understanding benchmarks</strong>,
+      Across <strong>26 standard video understanding benchmarks</strong>,
       JoyAI-VL-Interaction achieves an average score of <strong>57.53</strong>,
       outperforming <a href="https://github.com/QwenLM/Qwen3-VL">Qwen3-VL-8B-Instruct</a>
       at <strong>54.16</strong> by <strong>3.37 points</strong>.
@@ -3969,7 +3969,7 @@
       ['#evaluation > p:nth-of-type(1)', '我们在 58 个真实、事件驱动的视觉交互场景中评估模型。每个样本都会录制 JoyAI-VL-Interaction 与对应应用内视频通话助手的实时视频交互，并由人工评审从响应质量和响应时机两个维度进行成对判断。这样可以让评估尽量贴近我们关心的产品场景：当画面真正运动时，助手是否在正确时刻说出正确内容。'],
       ['#evaluation > p:nth-of-type(2)', '每个评估维度都对应评估台账中的一个场景类别。这里的视觉记忆类别是分钟级回忆设置，案例大多跨度为几分钟到十多分钟。表格报告的是人工评审在成对比较中更偏好 JoyAI-VL-Interaction、认为平局，或更偏好基线系统的比例。'],
       ['#evaluation .benchmark-callout', '最终整体结果中，JoyAI-VL-Interaction 在与豆包的成对比较中胜出 <span class="benchmark-score">77.6%</span>，在与 Gemini 的成对比较中胜出 <span class="benchmark-score">87.9%</span>，平局单独列在下方表格中。优势最明显的是最强调时机的场景：在监控与预警中，它面对两个系统都取得了全胜；在实时翻译和实时计数中也从未输过，正是这些事件驱动、需要在正确时刻行动的任务，轮次式产品在结构上最容易错过。', 'html'],
-      ['#evaluation .qwen-benchmark-note', '在 <strong>23 个标准视频理解基准</strong>上，JoyAI-VL-Interaction 的平均得分为 <strong>57.53</strong>，相比 <a href="https://github.com/QwenLM/Qwen3-VL">Qwen3-VL-8B-Instruct</a> 的 <strong>54.16</strong> 提升 <strong>3.37 分</strong>。', 'html'],
+      ['#evaluation .qwen-benchmark-note', '在 <strong>26 个标准视频理解基准</strong>上，JoyAI-VL-Interaction 的平均得分为 <strong>57.53</strong>，相比 <a href="https://github.com/QwenLM/Qwen3-VL">Qwen3-VL-8B-Instruct</a> 的 <strong>54.16</strong> 提升 <strong>3.37 分</strong>。', 'html'],
       ['.benchmark-title:nth-of-type(1)', 'JoyAI-VL-Interaction vs 豆包'],
       ['#evaluation th:nth-child(4)', (el) => el.textContent.trim() === 'Doubao' ? '豆包' : el.textContent, 'transformText'],
       ['#evaluation tbody tr:nth-child(1) td:first-child', '监控与预警'],
